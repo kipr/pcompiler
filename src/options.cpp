@@ -5,6 +5,14 @@
 
 using namespace Compiler;
 
+void Options::replace(const QString& str, const QString& value)
+{
+	foreach(const QString& key, keys()) {
+		const QString replacement = take(key).replace(str, value);
+		insert(key, replacement);
+	}
+}
+
 Options Options::load(const QString& path)
 {
 	Options ret;
@@ -24,7 +32,8 @@ Options Options::load(const QString& path)
 	);
 
 	foreach(const QString& key, settings.childKeys()) {
-		ret.insert(key, settings.value(key).toString());
+		const QString previous = ret.take(key);
+		ret.insert(key, previous + " " + settings.value(key).toString());
 	}
 	
 	settings.endGroup();
@@ -38,4 +47,5 @@ bool Options::save(const QString& path) const
 		settings.setValue(key, value(key));
 	}
 	settings.sync();
+	return true;
 }

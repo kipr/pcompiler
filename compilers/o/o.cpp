@@ -29,6 +29,7 @@ OutputList O::transform(const QStringList& input, const Options& options) const
 	
 	QString rawFlags = options[O_FLAGS].trimmed();
 	QStringList flags = rawFlags.isEmpty() ? QStringList() : rawFlags.split(" ");
+	qDebug() << "LD_FLAGS" << flags;
 	linker.start(Platform::cppPath(), (flags + input) << "-o" << output);
 	linker.waitForStarted();
 	linker.waitForFinished();
