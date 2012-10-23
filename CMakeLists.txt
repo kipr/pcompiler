@@ -11,7 +11,7 @@ SET(COMPILER ${pcompiler_SOURCE_DIR}/compilers)
 
 INCLUDE_DIRECTORIES(
 	${CMAKE_SOURCE_DIR} 
-	${CMAKE_SOURCE_DIR}/src 
+	${CMAKE_SOURCE_DIR}/src
 	${pcompiler_SOURCE_DIR}
 	${pcompiler_BINARY_DIR}
 	${INCLUDE}

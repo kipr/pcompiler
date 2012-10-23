@@ -12,6 +12,7 @@ namespace Compiler
 	class Compilers
 	{
 	public:
+		Compilers();
 		~Compilers();
 		
 		static Compilers *instance();
