@@ -17,6 +17,8 @@ INCLUDE_DIRECTORIES(
 	${INCLUDE}
 )
 
+set(QT_DONT_USE_QTGUI TRUE)
+
 INCLUDE(${QT_USE_FILE})
 
 FILE(GLOB INCLUDES ${INCLUDE}/pcompiler/*.hpp)
@@ -46,6 +48,16 @@ SET(LIBRARY_OUTPUT_PATH ${pcompiler_SOURCE_DIR}/lib)
 TARGET_LINK_LIBRARIES(pcompiler ${QT_LIBRARIES})
 
 LINK_DIRECTORIES(${pcompiler_SOURCE_DIR}/lib)
+
+IF(APPLE)
+SET(OSX_INSTALL_NAMES_SCRIPT "${pcompiler_SOURCE_DIR}/scripts/osx_install_names.sh")
+SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -headerpad_max_install_names")
+ADD_CUSTOM_TARGET(osx_install_names ALL 
+	COMMAND sh ${OSX_INSTALL_NAMES_SCRIPT} ${LIBRARY_OUTPUT_PATH}/libpcompiler.dylib
+		QtCore.framework/Versions/4/QtCore
+	WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+	DEPENDS pcompiler)
+ENDIF(APPLE)
 
 add_subdirectory(test)
 add_subdirectory(tools)
