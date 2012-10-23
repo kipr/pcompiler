@@ -40,7 +40,7 @@ ELSEIF(WIN32)
 	SET(CMAKE_CXX_FLAGS "-Wl,--enable-auto-import")
 ENDIF()
 
-ADD_LIBRARY(pcompiler SHARED ${SOURCES})
+ADD_LIBRARY(pcompiler STATIC ${SOURCES})
 
 SET(LIBRARY_OUTPUT_PATH ${pcompiler_SOURCE_DIR}/lib)
 TARGET_LINK_LIBRARIES(pcompiler ${QT_LIBRARIES})
@@ -51,4 +51,4 @@ add_subdirectory(test)
 add_subdirectory(tools)
 
 install(FILES ${INCLUDES} DESTINATION include/pcompiler)
-INSTALL(TARGETS pcompiler LIBRARY DESTINATION lib)
+INSTALL(TARGETS pcompiler ARCHIVE DESTINATION lib)
