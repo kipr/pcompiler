@@ -67,8 +67,10 @@ add_subdirectory(test)
 add_subdirectory(tools)
 
 IF(WIN32)
-install(FILES ${INCLUDES} DESTINATION /include/pcompiler)
-INSTALL(TARGETS pcompiler ARCHIVE DESTINATION /lib RUNTIME DESTINATION /lib)
+install(FILES ${INCLUDES} DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/include/pcompiler)
+INSTALL(TARGETS pcompiler
+	ARCHIVE DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib
+	RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib)
 ELSE(WIN32)
 install(FILES ${INCLUDES} DESTINATION include/pcompiler)
 INSTALL(TARGETS pcompiler LIBRARY DESTINATION lib)
