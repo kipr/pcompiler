@@ -1,6 +1,7 @@
 #include "pcompiler/output.hpp"
 
 #include <QProcess>
+#include <QDebug>
 
 using namespace Compiler;
 
@@ -84,6 +85,13 @@ const bool& Output::isTerminal() const
 	return m_terminal;
 }
 
+bool Output::isSuccess() const
+{
+	// FIXME: This may or may not be a sweeping
+	// generalization.
+	return m_exitCode == 0;
+}
+
 void Output::dump(QTextStream &stream) const
 {
 	stream << "Files:           {" << m_files.join(", ") << "}"<< endl;
@@ -97,6 +105,15 @@ Output Output::fromProcess(const QString& file, QProcess *process)
 {
 	return Output(file, process->exitCode(), process->readAllStandardOutput(),
 		process->readAllStandardError());
+}
+
+bool Output::isSuccess(const QList<Output> outputList)
+{
+	bool success = true;
+	foreach(const Output &out, outputList) {
+		success &= out.isSuccess();
+	}
+	return success;
 }
 
 QDataStream& operator<<(QDataStream& out, const Compiler::Output& rhs)

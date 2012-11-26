@@ -31,12 +31,15 @@ namespace Compiler
 		const QStringList& generatedFiles() const;
 		const bool& isTerminal() const;
 		
+		bool isSuccess() const;
+		
+		static bool isSuccess(const QList<Output> outputList);
+		
 		void dump(QTextStream &stream) const;
 		
 		static Output fromProcess(const QString& file, QProcess *process);
 		
 	private:
-		
 		QStringList m_files;
 		int m_exitCode;
 		QByteArray m_output;
