@@ -97,6 +97,7 @@ void Output::dump(QTextStream &stream) const
 	stream << "Files:           {" << m_files.join(", ") << "}"<< endl;
 	if(!m_generatedFiles.isEmpty()) stream << "Generated Files: {" << m_generatedFiles.join(", ") << "}" << endl;
 	stream << "Exit Code:       " << m_exitCode << endl;
+	stream << "Terminal?:       " << m_terminal << endl;
 	if(!m_output.isEmpty()) stream << "Output: " << endl << m_output << endl;
 	if(!m_error.isEmpty()) stream << "Error: " << endl << m_error << endl;
 }
