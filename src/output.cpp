@@ -6,7 +6,8 @@
 using namespace Compiler;
 
 Output::Output()
-	: m_exitCode(-1)
+	: m_exitCode(-1),
+	m_terminal(false)
 {
 	
 }
