@@ -46,7 +46,7 @@ void Engine::removeCompiler(const Base *compiler)
 	m_compilers.removeAll(compiler);
 }
 
-OutputList Engine::compile(const Input& input, const Options& options) const
+OutputList Engine::compile(const Input& input, const Options& options, Progress *progress) const
 {
 	Input workingInput(input);
 	QList<const Base *> workingCompilers(m_compilers);
@@ -58,9 +58,11 @@ OutputList Engine::compile(const Input& input, const Options& options) const
 		qDebug() << compiler->name();
 	}
 	
+	size_t processed = 0;
 	while(!workingCompilers.isEmpty()) {
 		const Base *compiler = workingCompilers.takeFirst();
 		QStringList workingInputList = QStringList(workingInput.toList());
+		if(progress) progress->progress(processed / (double)workingInputList.size());
 		QStringList applicableInput;
 		foreach(const QString& file, workingInputList) {
 			foreach(const QString& ext, compiler->extensions()) {
@@ -79,6 +81,7 @@ OutputList Engine::compile(const Input& input, const Options& options) const
 			ret += outList;
 		}
 		workingInput -= applicableInput.toSet();
+		processed += applicableInput.size();
 	}
 	
 	return ret;
