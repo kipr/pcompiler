@@ -6,7 +6,7 @@ namespace Compiler
 	class Progress
 	{
 	public:
-		virtual void progress(double fraction);
+		virtual void progress(double fraction) = 0;
 	};
 }
 
