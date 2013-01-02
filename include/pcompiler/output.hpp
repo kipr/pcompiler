@@ -5,6 +5,7 @@
 #include <QString>
 #include <QStringList>
 #include <QTextStream>
+#include <QMetaType>
 
 class QProcess;
 
@@ -50,6 +51,9 @@ namespace Compiler
 	
 	typedef QList<Output> OutputList;
 }
+
+Q_DECLARE_METATYPE(Compiler::Output);
+Q_DECLARE_METATYPE(Compiler::OutputList);
 
 QDataStream& operator<<(QDataStream& out, const Compiler::Output& rhs);
 QDataStream& operator>>(QDataStream& in, Compiler::Output& rhs);

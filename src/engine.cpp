@@ -58,7 +58,7 @@ OutputList Engine::compile(const Input& input, const Options& options, Progress 
 		qDebug() << compiler->name();
 	}
 	
-	size_t processed = 0;
+	double processed = 0;
 	while(!workingCompilers.isEmpty()) {
 		const Base *compiler = workingCompilers.takeFirst();
 		QStringList workingInputList = QStringList(workingInput.toList());
