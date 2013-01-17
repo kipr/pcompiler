@@ -43,7 +43,10 @@ Output Cpp::transform(const QString& file, const Options& options) const
 	QString rawFlags = options[CPP_FLAGS].trimmed();
 	QStringList flags = rawFlags.isEmpty() ? QStringList() : rawFlags.split(" ");
 	compiler.start(Platform::cppPath(), flags << "-c" << file << "-o" << output);
-	compiler.waitForStarted();
+	if(!compiler.waitForStarted()) {
+		ret = Output(Platform::ccPath(), 1, "", "error: Couldn't start the C++ compiler.");
+		return ret;
+	}
 	compiler.waitForFinished();
 	
 	ret.setExitCode(compiler.exitCode());

@@ -23,7 +23,10 @@ OutputList Class::transform(const QStringList& input, const Options& options) co
 	QString output = (options.contains(OUTPUT_DIR) ? options[OUTPUT_DIR] : QFileInfo(input[0]).absolutePath() + "/a.jar");
 	
 	compiler.start(jarPath(), (QStringList() << "cvf" << output) + input);
-	compiler.waitForStarted();
+	if(!compiler.waitForStarted()) {
+		ret = Output(Platform::ccPath(), 1, "", "error: Couldn't start the java archiver.");
+		return OutputList() << ret;
+	}
 	compiler.waitForFinished();
 	
 	ret.setExitCode(compiler.exitCode());

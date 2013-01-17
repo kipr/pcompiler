@@ -31,7 +31,10 @@ OutputList O::transform(const QStringList& input, const Options& options) const
 	QStringList flags = rawFlags.isEmpty() ? QStringList() : rawFlags.split(" ");
 	qDebug() << "LD_FLAGS" << flags;
 	linker.start(Platform::cppPath(), (flags + input) << "-o" << output);
-	linker.waitForStarted();
+	if(!linker.waitForStarted()) {
+		ret = Output(Platform::ccPath(), 1, "", "error: Couldn't start the linker.");
+		return OutputList() << ret;
+	}
 	linker.waitForFinished();
 	
 	ret.setExitCode(linker.exitCode());

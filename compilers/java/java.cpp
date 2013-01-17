@@ -26,7 +26,10 @@ OutputList Java::transform(const QStringList& input, const Options& options) con
 	QString rawFlags = options[JAVAC_FLAGS].trimmed();
 	QStringList flags = rawFlags.isEmpty() ? QStringList() : rawFlags.split(" ");
 	compiler.start(javacPath(), flags + input);
-	compiler.waitForStarted();
+	if(!compiler.waitForStarted()) {
+		ret = Output(Platform::ccPath(), 1, "", "error: Couldn't start the java compiler.");
+		return OutputList() << ret;
+	}
 	compiler.waitForFinished();
 	
 	ret.setExitCode(compiler.exitCode());
