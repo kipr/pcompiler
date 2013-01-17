@@ -40,11 +40,19 @@ Output C::transform(const QString& file, const Options& options) const
 	QString output = options.contains(TEMPORARY_DIR) ? options[TEMPORARY_DIR] : fileInfo.absolutePath();
 	output += "/" + fileInfo.fileName() + ".o";
 	
+	qDebug() << "Starting compile with" << Platform::ccPath();
+
 	QString rawFlags = options[C_FLAGS].trimmed();
 	QStringList flags = rawFlags.isEmpty() ? QStringList() : rawFlags.split(" ");
 	compiler.start(Platform::ccPath(), flags << "-c" << file << "-o" << output);
-	compiler.waitForStarted();
+	if(!compiler.waitForStarted()) {
+		qDebug() << "Couldn't start" << Platform::ccPath();
+		ret = Output(Platform::ccPath(), 1, "", "error: Couldn't start gcc");
+		return ret;
+	}
 	compiler.waitForFinished();
+
+	qDebug() << "gcc exited with" << compiler.exitCode();
 	
 	ret.setExitCode(compiler.exitCode());
 	ret.setOutput(compiler.readAllStandardOutput());
