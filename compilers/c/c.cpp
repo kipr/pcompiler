@@ -43,7 +43,7 @@ Output C::transform(const QString& file, const Options& options) const
 	qDebug() << "Starting compile with" << Platform::ccPath();
 
 	QString rawFlags = options[C_FLAGS].trimmed();
-	QStringList flags = rawFlags.isEmpty() ? QStringList() : rawFlags.split(" ");
+	QStringList flags = rawFlags.isEmpty() ? QStringList() : rawFlags.split("|");
 	compiler.start(Platform::ccPath(), flags << "-c" << file << "-o" << output);
 	if(!compiler.waitForStarted()) {
 		ret = Output(Platform::ccPath(), 1, "", "error: Couldn't start the C compiler.");
