@@ -28,7 +28,7 @@ OutputList O::transform(const QStringList& input, const Options& options) const
 		+ "/" + executableName + (ext.isEmpty() ? "" : "." + ext);
 	
 	QString rawFlags = options[O_FLAGS].trimmed();
-	QStringList flags = rawFlags.isEmpty() ? QStringList() : rawFlags.split(" ");
+	QStringList flags = OptionParser::arguments(rawFlags);
 	qDebug() << "LD_FLAGS" << flags;
 	linker.start(Platform::cppPath(), (flags + input) << "-o" << output);
 	if(!linker.waitForStarted()) {

@@ -49,3 +49,24 @@ bool Options::save(const QString& path) const
 	settings.sync();
 	return true;
 }
+
+QStringList OptionParser::arguments(const QString &argumentString)
+{
+	QString current;
+	QStringList ret;
+	QChar l = 0;
+	for(int i = 0; i < argumentString.size(); ++i) {
+		QChar c = argumentString[i];
+		if(c == '\"') {
+			if(l == '\\') current += "\"";
+			else {
+				ret << current.trimmed();
+				current = "";
+			}
+		} else if(c == '\\');
+		else current += c;
+		l = c;
+	}
+	if(!current.isEmpty()) ret << current.trimmed();
+	return ret;
+}

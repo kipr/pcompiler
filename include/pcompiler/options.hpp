@@ -14,6 +14,12 @@ namespace Compiler
 		static Options load(const QString& path);
 		bool save(const QString& path) const;
 	};
+	
+	class OptionParser
+	{
+	public:
+		static QStringList arguments(const QString &argumentString);
+	};
 }
 
 #endif

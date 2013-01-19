@@ -41,7 +41,7 @@ Output Cpp::transform(const QString& file, const Options& options) const
 	output += "/" + fileInfo.fileName() + ".o";
 
 	QString rawFlags = options[CPP_FLAGS].trimmed();
-	QStringList flags = rawFlags.isEmpty() ? QStringList() : rawFlags.split(" ");
+	QStringList flags = OptionParser::arguments(rawFlags);
 	compiler.start(Platform::cppPath(), flags << "-c" << file << "-o" << output);
 	if(!compiler.waitForStarted()) {
 		ret = Output(Platform::ccPath(), 1, "", "error: Couldn't start the C++ compiler.");
