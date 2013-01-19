@@ -24,7 +24,7 @@ OutputList Java::transform(const QStringList& input, const Options& options) con
 	QProcess compiler;
 	
 	QString rawFlags = options[JAVAC_FLAGS].trimmed();
-	QStringList flags = rawFlags.isEmpty() ? QStringList() : rawFlags.split(" ");
+	QStringList flags = OptionParser::arguments(rawFlags);
 	compiler.start(javacPath(), flags + input);
 	if(!compiler.waitForStarted()) {
 		ret = Output(Platform::ccPath(), 1, "", "error: Couldn't start the java compiler.");
