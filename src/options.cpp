@@ -55,17 +55,19 @@ QStringList OptionParser::arguments(const QString &argumentString)
 	QString current;
 	QStringList ret;
 	QChar l = 0;
+	bool isQuotes = false;
 	for(int i = 0; i < argumentString.size(); ++i) {
 		QChar c = argumentString[i];
 		if(c == '\"') {
 			if(l == '\\') current += "\"";
 			else {
-				ret << current.trimmed();
+				isQuotes = !isQuotes;
+				if(!current.isEmpty()) ret << current.trimmed();
 				current = "";
 			}
 		} else if(c == '\\');
-		else if(c == ' ') {
-			ret << current.trimmed();
+		else if(c == ' ' && !isQuotes) {
+			if(!current.isEmpty()) ret << current.trimmed();
 			current = "";
 		} else current += c;
 		l = c;
