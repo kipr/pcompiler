@@ -39,11 +39,10 @@ Output C::transform(const QString& file, const Options& options) const
 	
 	QString output = options.contains(TEMPORARY_DIR) ? options[TEMPORARY_DIR] : fileInfo.absolutePath();
 	output += "/" + fileInfo.fileName() + ".o";
-	
-	qDebug() << "Starting compile with" << Platform::ccPath();
 
 	QString rawFlags = options[C_FLAGS].trimmed();
 	QStringList flags = OptionParser::arguments(rawFlags);
+	// qDebug() << "Starting compile with" << (flags << "-c" << file << "-o" << output);
 	compiler.start(Platform::ccPath(), flags << "-c" << file << "-o" << output);
 	if(!compiler.waitForStarted()) {
 		ret = Output(Platform::ccPath(), 1, "", "error: Couldn't start the C compiler.");
