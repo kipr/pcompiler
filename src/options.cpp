@@ -64,7 +64,10 @@ QStringList OptionParser::arguments(const QString &argumentString)
 				current = "";
 			}
 		} else if(c == '\\');
-		else current += c;
+		else if(c == ' ') {
+			ret << current.trimmed();
+			current = "";
+		} else current += c;
 		l = c;
 	}
 	if(!current.isEmpty()) ret << current.trimmed();
