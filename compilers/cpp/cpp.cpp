@@ -44,7 +44,7 @@ Output Cpp::transform(const QString& file, const Options& options) const
 	QStringList flags = OptionParser::arguments(rawFlags);
 	compiler.start(Platform::cppPath(), flags << "-c" << file << "-o" << output);
 	if(!compiler.waitForStarted()) {
-		ret = Output(Platform::ccPath(), 1, "", "error: Couldn't start the C++ compiler.");
+		ret = Output(Platform::ccPath(), 1, "", "error: Couldn't start the C++ compiler.\n");
 		return ret;
 	}
 	compiler.waitForFinished();
