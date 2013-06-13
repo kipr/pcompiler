@@ -14,7 +14,7 @@ Class::Class()
 {
 }
 
-OutputList Class::transform(const QStringList& input, const Options& options) const
+OutputList Class::transform(const QStringList& input, Options& options) const
 {
 	Output ret;
 	ret.setFiles(input);

@@ -22,14 +22,14 @@ C::C()
 {
 }
 
-OutputList C::transform(const QStringList& input, const Options& options) const
+OutputList C::transform(const QStringList& input, Options& options) const
 {
 	OutputList ret;
 	foreach(const QString& file, input) ret << transform(file, options);
 	return ret;
 }
 
-Output C::transform(const QString& file, const Options& options) const
+Output C::transform(const QString& file, Options& options) const
 {
 	Output ret;
 	QFileInfo fileInfo(file);

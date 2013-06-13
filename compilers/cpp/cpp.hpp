@@ -17,9 +17,9 @@ namespace Compiler
 	public:
 		Cpp();
 		
-		virtual OutputList transform(const QStringList& input, const Options& options) const;
+		virtual OutputList transform(const QStringList& input, Options& options) const;
 	private:
-		Output transform(const QString& file, const Options& options) const;
+		Output transform(const QString& file, Options& options) const;
 	};
 }
 

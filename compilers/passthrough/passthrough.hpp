@@ -9,7 +9,7 @@ namespace Compiler
 	{
 	public:
 		Passthrough(const QString& name, const QStringList& extensions);
-		virtual OutputList transform(const QStringList& input, const Options& options) const;
+		virtual OutputList transform(const QStringList& input, Options& options) const;
 	};
 }
 

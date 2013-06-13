@@ -21,7 +21,8 @@ int main(int argc, char *argv[])
 	foreach(const QFileInfo& file, files) input += file.absoluteFilePath();
 	
 	Engine engine(Compilers::instance()->compilers());
-	OutputList res = engine.compile(input);
+	Options options = Options();
+	OutputList res = engine.compile(input, options);
 	
 	QTextStream out(stdout);
 	foreach(const Output& output, res) output.dump(out);

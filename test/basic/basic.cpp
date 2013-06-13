@@ -14,7 +14,8 @@ int main(int argc, char *argv[])
 	input += "ehh.c";
 	input += "bee.c";
 	
-	engine.compile(input);
+	Options options = Options();
+	engine.compile(input, options);
 	
 	return 0;
 }
