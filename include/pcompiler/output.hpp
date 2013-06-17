@@ -16,6 +16,12 @@ namespace Compiler
 	public:
 		Output();
 		Output(const QString& file, const int& exitCode, const QByteArray& output, const QByteArray& error);
+
+		enum TerminalType {
+			NotTerminal,
+			BinaryTerminal,
+			LibraryTerminal
+		};
 		
 		void setFile(const QString& file);
 		void setFiles(const QStringList& files);
@@ -23,14 +29,15 @@ namespace Compiler
 		void setOutput(const QByteArray& output);
 		void setError(const QByteArray& error);
 		void setGeneratedFiles(const QStringList& generatedFiles);
-		void setTerminal(const bool& terminal);
+		void setTerminal(const TerminalType& terminal);
 		
 		const QStringList& files() const;
 		const int& exitCode() const;
 		const QByteArray& output() const;
 		const QByteArray& error() const;
 		const QStringList& generatedFiles() const;
-		const bool& isTerminal() const;
+		const TerminalType& terminal() const;
+		const bool isTerminal() const;
 		
 		bool isSuccess() const;
 		
@@ -46,7 +53,7 @@ namespace Compiler
 		QByteArray m_output;
 		QByteArray m_error;
 		QStringList m_generatedFiles;
-		bool m_terminal;
+		TerminalType m_terminal;
 	};
 	
 	typedef QList<Output> OutputList;

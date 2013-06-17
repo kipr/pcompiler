@@ -7,7 +7,7 @@ using namespace Compiler;
 
 Output::Output()
 	: m_exitCode(-1),
-	m_terminal(false)
+	m_terminal(NotTerminal)
 {
 	
 }
@@ -17,7 +17,7 @@ Output::Output(const QString& file, const int& exitCode, const QByteArray& outpu
 	m_exitCode(exitCode),
 	m_output(output),
 	m_error(error),
-	m_terminal(false)
+	m_terminal(NotTerminal)
 {}
 
 void Output::setFile(const QString& file)
@@ -51,7 +51,7 @@ void Output::setGeneratedFiles(const QStringList& generatedFiles)
 	m_generatedFiles = generatedFiles;
 }
 
-void Output::setTerminal(const bool& terminal)
+void Output::setTerminal(const TerminalType	& terminal)
 {
 	m_terminal = terminal;
 }
@@ -81,9 +81,14 @@ const QStringList& Output::generatedFiles() const
 	return m_generatedFiles;
 }
 
-const bool& Output::isTerminal() const
+const Output::TerminalType& Output::terminal() const
 {
 	return m_terminal;
+}
+
+const bool Output::isTerminal() const
+{
+	return (m_terminal != NotTerminal);
 }
 
 bool Output::isSuccess() const

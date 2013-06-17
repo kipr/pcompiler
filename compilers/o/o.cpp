@@ -42,8 +42,8 @@ OutputList O::transform(const QStringList& input, Options& options) const
 	ret.setOutput(linker.readAllStandardOutput());
 	ret.setError(linker.readAllStandardError());
 	ret.setGeneratedFiles(QStringList() << output);
-	ret.setTerminal(true);
-	
+	ret.setTerminal(Output::BinaryTerminal);
+
 	return OutputList() << ret;
 }
 
