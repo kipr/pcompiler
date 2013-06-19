@@ -16,25 +16,32 @@ O::O()
 {
 }
 
-OutputList O::transform(const QStringList& input, Options& options) const
+Output O::produceBinary(const QStringList& input, Options& options) const
 {
+	QProcess linker;
 	Output ret;
 	ret.setFiles(input);
 	
-	QProcess linker;
 	const QString& ext = Platform::exeExtension();
-	QString executableName = input.size() == 1 ? QFileInfo(input[0]).baseName() : "application";
+	QString name = input.size() == 1 ? QFileInfo(input[0]).baseName() : "application";
 	QString output = (options.contains(OUTPUT_DIR) ? options[OUTPUT_DIR] : QFileInfo(input[0]).absolutePath())
-		+ "/" + executableName + (ext.isEmpty() ? "" : "." + ext);
+		+ "/" + name + (ext.isEmpty() ? "" : "." + ext);
 	
 	QString rawFlags = options[O_FLAGS].trimmed();
 	QStringList flags = OptionParser::arguments(rawFlags);
-	qDebug() << "LD_FLAGS" << flags;
-	linker.start(Platform::cppPath(), (input + flags) << "-o" << output);
-	qDebug() << "ld" << ((input + flags) << "-o" << output);
+	//qDebug() << "LD_FLAGS" << flags;
+
+	QStringList args;
+	args << (input + flags) << "-o" << output;
+	Options::const_iterator it = options.find("PROJECT_DEPS");
+	if(it != options.end()) args << "-L/kovan/libraries" << it.value();
+	//args << "-L/kovan/libraries" << "-lfunc";
+	//qDebug() << "ld" << args;
+	
+	linker.start(Platform::cppPath(), args);
 	if(!linker.waitForStarted()) {
-		ret = Output(Platform::ccPath(), 1, "", "error: Couldn't start the linker.\n");
-		return OutputList() << ret;
+		ret = Output(Platform::ccPath(), 1, "", "ERROR: Couldn't start linker to produce binary.\n");
+		return ret;
 	}
 	linker.waitForFinished();
 	
@@ -44,7 +51,42 @@ OutputList O::transform(const QStringList& input, Options& options) const
 	ret.setGeneratedFiles(QStringList() << output);
 	ret.setTerminal(Output::BinaryTerminal);
 
-	return OutputList() << ret;
+	return ret;
+}
+
+Output O::produceLibrary(const QStringList& input, Options& options) const
+{
+	QProcess linker;
+	Output ret;
+	ret.setFiles(input);
+	
+	const QString& ext = "so";
+	QString name = input.size() == 1 ? QFileInfo(input[0]).baseName() : "library";
+	QString output = (options.contains(OUTPUT_DIR) ? options[OUTPUT_DIR] : QFileInfo(input[0]).absolutePath())
+		+ "/" + name + (ext.isEmpty() ? "" : "." + ext);
+
+	QStringList args;
+	args << "-shared" << "-o" << output << input;
+
+	linker.start(Platform::cppPath(), args);
+	if(!linker.waitForStarted()) {
+		ret = Output(Platform::ccPath(), 1, "", "ERROR: Couldn't start linker to produce library.\n");
+		return ret;
+	}
+	linker.waitForFinished();
+	
+	ret.setExitCode(linker.exitCode());
+	ret.setOutput(linker.readAllStandardOutput());
+	ret.setError(linker.readAllStandardError());
+	ret.setGeneratedFiles(QStringList() << output);
+	ret.setTerminal(Output::LibraryTerminal);
+
+	return ret;
+}
+
+OutputList O::transform(const QStringList& input, Options& options) const
+{
+	return OutputList() << produceBinary(input, options) << produceLibrary(input, options);
 }
 
 REGISTER_COMPILER(O)

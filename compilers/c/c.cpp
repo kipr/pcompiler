@@ -42,15 +42,12 @@ Output C::transform(const QString& file, Options& options) const
 
 	QString rawFlags = options[C_FLAGS].trimmed();
 	QStringList flags = OptionParser::arguments(rawFlags);
-	// qDebug() << "Starting compile with" << (flags << "-c" << file << "-o" << output);
-	compiler.start(Platform::ccPath(), flags << "-c" << file << "-o" << output);
+	compiler.start(Platform::ccPath(), flags << "-fPIC" << "-c" << file << "-o" << output);
 	if(!compiler.waitForStarted()) {
 		ret = Output(Platform::ccPath(), 1, "", "error: Couldn't start the C compiler.\n");
 		return ret;
 	}
 	compiler.waitForFinished();
-
-	qDebug() << "gcc exited with" << compiler.exitCode();
 	
 	ret.setExitCode(compiler.exitCode());
 	ret.setOutput(compiler.readAllStandardOutput());

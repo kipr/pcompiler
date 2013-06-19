@@ -53,10 +53,10 @@ OutputList Engine::compile(const Input& input, Options& options, Progress *progr
 	Options opt;
 	OutputList ret;
 	
-	qDebug() << workingCompilers.size() << "compilers";
+	/*qDebug() << workingCompilers.size() << "compilers";
 	foreach(const Base *compiler, workingCompilers) {
 		qDebug() << compiler->name();
-	}
+	}*/
 	
 	double processed = 0;
 	while(!workingCompilers.isEmpty()) {
