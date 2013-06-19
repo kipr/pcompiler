@@ -43,6 +43,7 @@ Options Options::load(const QString& path)
 bool Options::save(const QString& path) const
 {
 	QSettings settings(path, QSettings::IniFormat);
+	settings.clear();
 	foreach(const QString& key, keys()) {
 		settings.setValue(key, value(key));
 	}
