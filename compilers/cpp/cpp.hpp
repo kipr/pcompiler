@@ -10,6 +10,8 @@ namespace Compiler
 	{
 	public:
 		Hpp();
+
+		virtual OutputList transform(const QStringList& input, Options& options) const;
 	};
 	
 	class Cpp : public Base

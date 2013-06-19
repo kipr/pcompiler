@@ -75,7 +75,7 @@ OutputList Engine::compile(const Input& input, Options& options, Progress *progr
 			qDebug() << "Calling compiler" << compiler->name() << "with" << applicableInput;
 			OutputList outList = compiler->transform(applicableInput, options);
 			foreach(const Output& out, outList) {
-				if(!out.isSuccess()) return outList;
+				if(!out.isSuccess()) return ret + outList;
 				workingInput += out.generatedFiles().toSet();
 			}
 			ret += outList;

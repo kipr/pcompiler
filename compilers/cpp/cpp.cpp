@@ -15,6 +15,16 @@ Hpp::Hpp()
 	: Passthrough("h++", QStringList() << "hpp" << "hxx" << "hh")
 {}
 
+OutputList Hpp::transform(const QStringList& input, Options& options) const
+{
+	Output ret;
+	ret.setFiles(input);
+	ret.setExitCode(0);
+	ret.setGeneratedFiles(input);
+	ret.setTerminal(Output::HeaderTerminal);
+	return OutputList() << ret;
+}
+
 REGISTER_COMPILER(Hpp)
 
 Cpp::Cpp()

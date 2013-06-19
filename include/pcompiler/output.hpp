@@ -20,7 +20,8 @@ namespace Compiler
 		enum TerminalType {
 			NotTerminal,
 			BinaryTerminal,
-			LibraryTerminal
+			LibraryTerminal,
+			HeaderTerminal
 		};
 		
 		void setFile(const QString& file);
