@@ -34,8 +34,10 @@ Output O::produceBinary(const QStringList& input, Options& options) const
 	QStringList args;
 	args << (input + flags) << "-o" << output;
 	Options::const_iterator it = options.find("PROJECT_DEPS");
-	if(it != options.end()) args << "-L/kovan/libraries" << it.value();
-	//args << "-L/kovan/libraries" << "-lfunc";
+	if(it != options.end()) {
+		args << "-L/kovan/libraries";
+		foreach(QString dep, OptionParser::arguments(it.value())) args << "-l" + dep;
+	}
 	//qDebug() << "ld" << args;
 	
 	linker.start(Platform::cppPath(), args);
