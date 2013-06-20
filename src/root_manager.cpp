@@ -3,7 +3,7 @@
 #include <QDir>
 #include <QDebug>
 
-bool RootManager::install(Compiler::OutputList outputs, const QString &root, const QString &project)
+Compiler::OutputList RootManager::install(Compiler::OutputList terminals, const QString &root, const QString &project)
 {
 	using namespace Compiler;
 
@@ -12,17 +12,18 @@ bool RootManager::install(Compiler::OutputList outputs, const QString &root, con
 	const QString &libDir = "lib/" + project + "/";
 	const QString &includeDir = "include/" + project + "/";
 
-	if(!rootDir.exists(binDir) && !rootDir.mkpath(binDir)) return false;
-	if(!rootDir.exists(libDir) && !rootDir.mkpath(libDir)) return false;
-	if(!rootDir.exists(includeDir) && !rootDir.mkpath(includeDir)) return false;
+	if((!rootDir.exists(binDir) && !rootDir.mkpath(binDir)) ||
+		(!rootDir.exists(libDir) && !rootDir.mkpath(libDir)) ||
+		(!rootDir.exists(includeDir) && !rootDir.mkpath(includeDir))) {
+		return OutputList() << Output(root, 1, QByteArray(), "Error: unable to create required directory");
+	}
 
-	foreach(const Output& out, outputs) {
-		foreach(QString file, out.generatedFiles()) {
+	foreach(const Output& term, terminals) {
+		foreach(QString file, term.generatedFiles()) {
 			QFileInfo fileInfo(file);
 			QString relativeDest;
-			switch(out.terminal()) {
+			switch(term.terminal()) {
 				case Output::NotTerminal:
-					qDebug() << "Warning: skipping non-terminal output";
 					break;
 				case Output::BinaryTerminal:
 					relativeDest = binDir + (fileInfo.suffix().isEmpty() ? project : project + "." + fileInfo.suffix());
@@ -38,13 +39,13 @@ bool RootManager::install(Compiler::OutputList outputs, const QString &root, con
 			}
 			rootDir.remove(relativeDest);
 			if(!QFile::copy(fileInfo.absoluteFilePath(), rootDir.absoluteFilePath(relativeDest))) {
-				qDebug() << "Error: failed to copy" << fileInfo.absoluteFilePath() << "to" << rootDir.absoluteFilePath(relativeDest);
-				return false;
+				return OutputList() << Output(root, 1, QByteArray(),
+					("Error: failed to copy " + fileInfo.absoluteFilePath() + " to " + rootDir.absoluteFilePath(relativeDest)).toLatin1());
 			}
 		}
 	}
 
-	return true;
+	return OutputList();
 }
 
 bool RootManager::uninstall(const QString &root, const QString &project)

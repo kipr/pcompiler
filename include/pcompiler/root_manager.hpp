@@ -6,7 +6,7 @@
 class RootManager
 {
 public:
-	static bool install(Compiler::OutputList outputs, const QString &root, const QString &project);
+	static Compiler::OutputList install(Compiler::OutputList terminals, const QString &root, const QString &project);
 	static bool uninstall(const QString &root, const QString &project);
 	static bool clean();
 
