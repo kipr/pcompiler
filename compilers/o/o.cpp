@@ -44,8 +44,7 @@ Output O::produceBinary(const QStringList& input, Options& options) const
 	
 	linker.start(Platform::cppPath(), args);
 	if(!linker.waitForStarted()) {
-		ret = Output(Platform::ccPath(), 1, "", "ERROR: Couldn't start linker to produce binary.\n");
-		return ret;
+		return Output(Platform::ccPath(), 1, "", "error: couldn't start linker to produce binary\n");
 	}
 	linker.waitForFinished();
 	
@@ -74,8 +73,7 @@ Output O::produceLibrary(const QStringList& input, Options& options) const
 
 	linker.start(Platform::cppPath(), args);
 	if(!linker.waitForStarted()) {
-		ret = Output(Platform::ccPath(), 1, "", "ERROR: Couldn't start linker to produce library.\n");
-		return ret;
+		return Output(Platform::ccPath(), 1, "", "error: couldn't start linker to produce library\n");
 	}
 	linker.waitForFinished();
 	

@@ -15,7 +15,7 @@ Compiler::OutputList RootManager::install(Compiler::OutputList terminals, const 
 	if((!rootDir.exists(binDir) && !rootDir.mkpath(binDir)) ||
 		(!rootDir.exists(libDir) && !rootDir.mkpath(libDir)) ||
 		(!rootDir.exists(includeDir) && !rootDir.mkpath(includeDir))) {
-		return OutputList() << Output(root, 1, QByteArray(), "Error: unable to create required directory");
+		return OutputList() << Output(root, 1, QByteArray(), "error: unable to create required directory");
 	}
 
 	foreach(const Output& term, terminals) {
@@ -40,7 +40,7 @@ Compiler::OutputList RootManager::install(Compiler::OutputList terminals, const 
 			rootDir.remove(relativeDest);
 			if(!QFile::copy(fileInfo.absoluteFilePath(), rootDir.absoluteFilePath(relativeDest))) {
 				return OutputList() << Output(root, 1, QByteArray(),
-					("Error: failed to copy " + fileInfo.absoluteFilePath() + " to " + rootDir.absoluteFilePath(relativeDest)).toLatin1());
+					("error: failed to copy " + fileInfo.absoluteFilePath() + " to " + rootDir.absoluteFilePath(relativeDest)).toLatin1());
 			}
 		}
 	}

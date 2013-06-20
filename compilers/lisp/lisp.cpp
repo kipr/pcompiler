@@ -20,7 +20,7 @@ OutputList Lisp::transform(const QStringList& input, Options& options) const
 {
 	Output ret;
 	ret.setExitCode(1);
-	ret.setError("error: pcompiler doesn't know how to compile lisp files.");
+	ret.setError("error: pcompiler doesn't know how to compile lisp files");
 	return OutputList() << ret;
 }
 

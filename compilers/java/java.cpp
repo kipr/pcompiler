@@ -27,7 +27,7 @@ OutputList Java::transform(const QStringList& input, Options& options) const
 	QStringList flags = OptionParser::arguments(rawFlags);
 	compiler.start(javacPath(), flags + input);
 	if(!compiler.waitForStarted()) {
-		ret = Output(Platform::ccPath(), 1, "", "error: Couldn't start the java compiler.");
+		ret = Output(Platform::ccPath(), 1, "", "error: couldn't start the Java compiler");
 		return OutputList() << ret;
 	}
 	compiler.waitForFinished();

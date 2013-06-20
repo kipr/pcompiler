@@ -54,7 +54,7 @@ Output C::transform(const QString& file, Options& options) const
 	QStringList flags = OptionParser::arguments(rawFlags);
 	compiler.start(Platform::ccPath(), flags << "-fPIC" << "-c" << file << "-o" << output);
 	if(!compiler.waitForStarted()) {
-		ret = Output(Platform::ccPath(), 1, "", "error: Couldn't start the C compiler.\n");
+		ret = Output(Platform::ccPath(), 1, "", "error: couldn't start the C compiler\n");
 		return ret;
 	}
 	compiler.waitForFinished();
