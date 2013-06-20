@@ -35,8 +35,10 @@ Output O::produceBinary(const QStringList& input, Options& options) const
 	args << (input + flags) << "-o" << output;
 	Options::const_iterator it = options.find("PROJECT_DEPS");
 	if(it != options.end()) {
-		args << "-L/kovan/libraries";
-		foreach(QString dep, OptionParser::arguments(it.value())) args << "-l" + dep;
+		foreach(QString dep, OptionParser::arguments(it.value())) {
+			args << "-L/kovan/prefix/lib/" + dep; // FIXME: This path shouldn't be hard-coded!
+			args << "-l" + dep;
+		}
 	}
 	//qDebug() << "ld" << args;
 	
