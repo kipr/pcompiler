@@ -68,9 +68,12 @@ bool RootManager::uninstall(const QString &root, const QString &project)
 	return success;
 }
 
-bool RootManager::clean()
+bool RootManager::clean(const QString &root)
 {
-	return false;
+	QDir rootDir(root);
+	return removeDir(rootDir.filePath("bin/")) &&
+		removeDir(rootDir.filePath("lib/")) &&
+		removeDir(rootDir.filePath("include/"));
 }
 
 bool RootManager::removeDir(const QString &path)

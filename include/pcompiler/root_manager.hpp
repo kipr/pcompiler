@@ -8,7 +8,7 @@ class RootManager
 public:
 	static Compiler::OutputList install(Compiler::OutputList terminals, const QString &root, const QString &project);
 	static bool uninstall(const QString &root, const QString &project);
-	static bool clean();
+	static bool clean(const QString &root);
 
 private:
 	static bool removeDir(const QString &path);
