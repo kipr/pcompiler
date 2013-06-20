@@ -47,10 +47,43 @@ bool RootManager::install(Compiler::OutputList outputs, const QString &root, con
 	return true;
 }
 
-bool RootManager::uninstall(const QString &project) {
+bool RootManager::uninstall(const QString &root, const QString &project)
+{
+	bool success = true;
+	QDir rootDir(root);
+	if(rootDir.cd("bin/" + project)) {
+		success &= removeDir(rootDir.absolutePath());
+		rootDir.cd("../..");
+	}
+	if(rootDir.cd("lib/" + project)) {
+		success &= removeDir(rootDir.absolutePath());
+		rootDir.cd("../..");
+	}
+	if(rootDir.cd("include/" + project)) {
+		success &= removeDir(rootDir.absolutePath());
+		rootDir.cd("../..");
+	}
+
+	return success;
+}
+
+bool RootManager::clean()
+{
 	return false;
 }
 
-bool RootManager::clean() {
-	return false;
+bool RootManager::removeDir(const QString &path)
+{
+	bool success = true;
+	QDir directory(path);
+
+	QFileInfoList files = directory.entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
+	foreach(QFileInfo file, files) success &= directory.remove(file.fileName());
+
+	QFileInfoList dirs = directory.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
+	foreach(QFileInfo dir, dirs) success &= removeDir(dir.absoluteFilePath());
+
+	success &= directory.rmdir(directory.absolutePath());
+
+	return success;
 }

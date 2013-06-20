@@ -7,8 +7,11 @@ class RootManager
 {
 public:
 	static bool install(Compiler::OutputList outputs, const QString &root, const QString &project);
-	static bool uninstall(const QString &project);
+	static bool uninstall(const QString &root, const QString &project);
 	static bool clean();
+
+private:
+	static bool removeDir(const QString &path);
 };
 
 #endif
