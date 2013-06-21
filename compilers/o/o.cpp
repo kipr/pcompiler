@@ -23,7 +23,7 @@ Output O::produceBinary(const QStringList& input, Options& options) const
 	ret.setFiles(input);
 	
 	const QString& ext = Platform::exeExtension();
-	QString name = input.size() == 1 ? QFileInfo(input[0]).baseName() : "application";
+	QString name = input.size() == 1 ? QFileInfo(input[0]).baseName() : "executable";
 	QString output = (options.contains(OUTPUT_DIR) ? options[OUTPUT_DIR] : QFileInfo(input[0]).absolutePath())
 		+ "/" + name + (ext.isEmpty() ? "" : "." + ext);
 	
@@ -41,7 +41,7 @@ Output O::produceBinary(const QStringList& input, Options& options) const
 		}
 	}
 	//qDebug() << "ld" << args;
-	
+
 	linker.start(Platform::cppPath(), args);
 	if(!linker.waitForStarted()) {
 		return Output(Platform::ccPath(), 1, "", "error: couldn't start linker to produce binary\n");
