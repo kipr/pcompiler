@@ -27,20 +27,22 @@ Output O::produceBinary(const QStringList& input, Options& options) const
 	QString output = (options.contains(OUTPUT_DIR) ? options[OUTPUT_DIR] : QFileInfo(input[0]).absolutePath())
 		+ "/" + name + (ext.isEmpty() ? "" : "." + ext);
 	
+	Options::const_iterator it = options.find("PROJECT_DEPS");
+	if(it != options.end()) {
+		QStringList addOFlags;
+		foreach(QString dep, OptionParser::arguments(it.value())) {
+			addOFlags << "-L${USER_ROOT}/lib/" + dep;
+			addOFlags << "-l" + dep;
+		}
+		options.insert(O_FLAGS, options.value(O_FLAGS) + addOFlags.join(" "));
+		options.expand();
+	}
+
 	QString rawFlags = options[O_FLAGS].trimmed();
 	QStringList flags = OptionParser::arguments(rawFlags);
-	//qDebug() << "LD_FLAGS" << flags;
 
 	QStringList args;
 	args << (input + flags) << "-o" << output;
-	Options::const_iterator it = options.find("PROJECT_DEPS");
-	if(it != options.end()) {
-		foreach(QString dep, OptionParser::arguments(it.value())) {
-			args << "-L/kovan/prefix/lib/" + dep; // FIXME: This path shouldn't be hard-coded!
-			args << "-l" + dep;
-		}
-	}
-	//qDebug() << "ld" << args;
 
 	linker.start(Platform::cppPath(), args);
 	if(!linker.waitForStarted()) {

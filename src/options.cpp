@@ -5,14 +5,6 @@
 
 using namespace Compiler;
 
-void Options::replace(const QString& str, const QString& value)
-{
-	foreach(const QString& key, keys()) {
-		const QString replacement = take(key).replace(str, value);
-		insert(key, replacement);
-	}
-}
-
 Options Options::load(const QString& path)
 {
 	Options ret;
@@ -49,6 +41,33 @@ bool Options::save(const QString& path) const
 	}
 	settings.sync();
 	return true;
+}
+
+void Options::setVariable(const QString &str, const QString &value)
+{
+	m_vars.insert(str, value);
+}
+
+void Options ::removeVariable(const QString &str)
+{
+	m_vars.remove(str);
+}
+
+void Options::expand()
+{
+	QMap<QString, QString>::const_iterator it = m_vars.constBegin();
+	while(it != m_vars.constEnd()) {
+		replace(it.key(), it.value());
+		++it;
+	}
+}
+
+void Options::replace(const QString& str, const QString& value)
+{
+	foreach(const QString& key, keys()) {
+		const QString replacement = take(key).replace(str, value);
+		insert(key, replacement);
+	}
 }
 
 QStringList OptionParser::arguments(const QString &argumentString)

@@ -18,6 +18,7 @@ OutputList Ops::transform(const QStringList& input, Options& options) const
 		    options.insert(it.key(), (options.value(it.key()) + " " + it.value()).trimmed());
 		}
 	}
+	options.expand();
 
 	return Passthrough::transform(input, options);
 }
