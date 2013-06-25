@@ -48,9 +48,21 @@ void Options::setVariable(const QString &str, const QString &value)
 	m_vars.insert(str, value);
 }
 
-void Options ::removeVariable(const QString &str)
+void Options::removeVariable(const QString &str)
 {
 	m_vars.remove(str);
+}
+
+QString Options::variable(const QString &str) const
+{
+	QMap<QString, QString>::const_iterator it = m_vars.find(str);
+	if(it == m_vars.end()) return QString();
+	return *it;
+}
+
+QStringList Options::variables() const
+{
+	return QStringList(m_vars.keys());
 }
 
 void Options::expand()

@@ -3,14 +3,15 @@
 #include <QDir>
 #include <QDebug>
 
-Compiler::OutputList RootManager::install(Compiler::OutputList terminals, const QString &root, const QString &project)
+Compiler::OutputList RootManager::install(const Compiler::OutputList &terminals, const QString &root, const QString &project)
 {
 	using namespace Compiler;
 
 	QDir rootDir(root);
-	const QString &binDir = "bin/" + project + "/";
-	const QString &libDir = "lib/" + project + "/";
-	const QString &includeDir = "include/" + project + "/";
+	
+	const QString binDir = "bin/" + project + "/";
+	const QString libDir = "lib/" + project + "/";
+	const QString includeDir = "include/" + project + "/";
 
 	if((!rootDir.exists(binDir) && !rootDir.mkpath(binDir)) ||
 		(!rootDir.exists(libDir) && !rootDir.mkpath(libDir)) ||
@@ -18,7 +19,7 @@ Compiler::OutputList RootManager::install(Compiler::OutputList terminals, const 
 		return OutputList() << Output(root, 1, QByteArray(), "error: unable to create required directory");
 	}
 
-	foreach(const Output& term, terminals) {
+	foreach(const Output &term, terminals) {
 		foreach(QString file, term.generatedFiles()) {
 			QFileInfo fileInfo(file);
 			QString relativeDest;
@@ -26,10 +27,12 @@ Compiler::OutputList RootManager::install(Compiler::OutputList terminals, const 
 				case Output::NotTerminal:
 					break;
 				case Output::BinaryTerminal:
-					relativeDest = binDir + (fileInfo.suffix().isEmpty() ? project : project + "." + fileInfo.suffix());
+					relativeDest = binDir + (fileInfo.suffix().isEmpty() ? project : project + "."
+						+ fileInfo.suffix());
 					break;
 				case Output::LibraryTerminal:
-					relativeDest = libDir + "lib" + (fileInfo.suffix().isEmpty() ? project : project + "." + fileInfo.suffix());
+					relativeDest = libDir + "lib" + (fileInfo.suffix().isEmpty() ? project : project
+						+ "." + fileInfo.suffix());
 					break;
 				case Output::HeaderTerminal:
 					relativeDest = includeDir + fileInfo.fileName();
@@ -40,7 +43,8 @@ Compiler::OutputList RootManager::install(Compiler::OutputList terminals, const 
 			rootDir.remove(relativeDest);
 			if(!QFile::copy(fileInfo.absoluteFilePath(), rootDir.absoluteFilePath(relativeDest))) {
 				return OutputList() << Output(root, 1, QByteArray(),
-					("error: failed to copy " + fileInfo.absoluteFilePath() + " to " + rootDir.absoluteFilePath(relativeDest)).toLatin1());
+					("error: failed to copy " + fileInfo.absoluteFilePath() + " to "
+						+ rootDir.absoluteFilePath(relativeDest)).toLatin1());
 			}
 		}
 	}
@@ -52,6 +56,7 @@ bool RootManager::uninstall(const QString &root, const QString &project)
 {
 	bool success = true;
 	QDir rootDir(root);
+	
 	if(rootDir.cd("bin/" + project)) {
 		success &= removeDir(rootDir.absolutePath());
 		rootDir.cd("../..");
@@ -82,10 +87,10 @@ bool RootManager::removeDir(const QString &path)
 	QDir directory(path);
 
 	QFileInfoList files = directory.entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
-	foreach(QFileInfo file, files) success &= directory.remove(file.fileName());
+	foreach(const QFileInfo &file, files) success &= directory.remove(file.fileName());
 
 	QFileInfoList dirs = directory.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
-	foreach(QFileInfo dir, dirs) success &= removeDir(dir.absoluteFilePath());
+	foreach(const QFileInfo &dir, dirs) success &= removeDir(dir.absoluteFilePath());
 
 	success &= directory.rmdir(directory.absolutePath());
 
