@@ -13,15 +13,15 @@ Compiler::OutputList RootManager::install(const Compiler::OutputList &output, co
 	const QDir lib(RootManager::lib(root).filePath(project));
 	const QDir include(RootManager::include(root).filePath(project));
 
-	if(!bin.exists() && !bin.mkpath("")) {
+	if(!bin.exists() && !bin.mkpath(".")) {
 		return OutputList() << Output(root, 1, QByteArray(), "error: unable to create project bin dir");
 	}
 	
-	if(!lib.exists() && !lib.mkpath("")) {
+	if(!lib.exists() && !lib.mkpath(".")) {
 		return OutputList() << Output(root, 1, QByteArray(), "error: unable to create project lib dir");
 	}
 	
-	if(!include.exists() && !include.mkpath("")) {
+	if(!include.exists() && !include.mkpath(".")) {
 		return OutputList() << Output(root, 1, QByteArray(), "error: unable to create project include dir");
 	}
 
@@ -49,7 +49,7 @@ Compiler::OutputList RootManager::install(const Compiler::OutputList &output, co
 			}
 			
 			qDebug() << "Removing " << dest;
-			if(!QDir(dest).remove("")) {
+			if(QFile::exists(dest) && !QFile::remove(dest)) {
 				return OutputList() << Output(root, 1, QByteArray(),
 					("error: failed to remove " + dest).toLatin1());
 			}
