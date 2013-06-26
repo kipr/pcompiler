@@ -16,6 +16,8 @@ namespace Compiler
 		bool uninstall(const QString &project) const;
 		bool clean() const;
 
+		QStringList libDirectories() const;
+
 		QDir bin() const;
 		QDir lib() const;
 		QDir include() const;
