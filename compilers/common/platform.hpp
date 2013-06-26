@@ -10,6 +10,7 @@ namespace Compiler
 	public:
 		static QString ccPath();
 		static QString cppPath();
+		static QString libExtension();
 		static QString exeExtension();
 	};
 }

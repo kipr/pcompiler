@@ -65,13 +65,27 @@ Output O::produceLibrary(const QStringList& input, Options& options) const
 	Output ret;
 	ret.setFiles(input);
 	
-	const QString& ext = "so";
-	QString name = input.size() == 1 ? QFileInfo(input[0]).baseName() : "library";
-	QString output = (options.contains(OUTPUT_DIR) ? options[OUTPUT_DIR] : QFileInfo(input[0]).absolutePath())
+	const QString ext = Platform::libExtension();
+	const QString name = input.size() == 1 ? QFileInfo(input[0]).baseName() : "library";
+	const QString output = (options.contains(OUTPUT_DIR) ? options[OUTPUT_DIR] : QFileInfo(input[0]).absolutePath())
 		+ "/" + name + (ext.isEmpty() ? "" : "." + ext);
+	
+	Options::const_iterator it = options.find("PROJECT_DEPS");
+	if(it != options.end()) {
+		QStringList addOFlags;
+		foreach(QString dep, OptionParser::arguments(it.value())) {
+			addOFlags << "-L${USER_ROOT}/lib/" + dep;
+			addOFlags << "-l" + dep;
+		}
+		options.insert(O_FLAGS, options.value(O_FLAGS) + addOFlags.join(" "));
+		options.expand();
+	}
+
+	QString rawFlags = options[O_FLAGS].trimmed();
+	QStringList flags = OptionParser::arguments(rawFlags);
 
 	QStringList args;
-	args << "-shared" << "-o" << output << input;
+	args << "-shared" << "-o" << output << input << flags;
 
 	linker.start(Platform::cppPath(), args);
 	if(!linker.waitForStarted()) {
