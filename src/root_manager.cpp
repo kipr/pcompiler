@@ -49,7 +49,7 @@ Compiler::OutputList RootManager::install(const Compiler::OutputList &output, co
 			}
 			
 			qDebug() << "Removing " << dest;
-			if(!QDir(dest).remove("")) {
+			if(QFile::exists(dest) && !QFile::remove(dest)) {
 				return OutputList() << Output(root, 1, QByteArray(),
 					("error: failed to remove " + dest).toLatin1());
 			}
