@@ -12,20 +12,20 @@ namespace Compiler
 	public:
 		RootManager(const QString &root);
 
-		Compiler::OutputList install(const Compiler::OutputList &output, const QString &project);
-		bool uninstall(const QString &project);
-		bool clean();
+		Compiler::OutputList install(const Compiler::OutputList &output, const QString &project) const;
+		bool uninstall(const QString &project) const;
+		bool clean() const;
 
-		QDir bin();
-		QDir lib();
-		QDir include();
-		
-		virtual QString binPath();
-		virtual QString libPath();
-		virtual QString includePath();
+		QDir bin() const;
+		QDir lib() const;
+		QDir include() const;
+
+		virtual QString binPath() const;
+		virtual QString libPath() const;
+		virtual QString includePath() const;
 
 	private:
-		bool removeDir(const QString &path);
+		bool removeDir(const QString &path) const;
 
 		QString m_root;
 	};
