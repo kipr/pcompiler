@@ -11,7 +11,7 @@ RootManager::RootManager(const QString &root)
 
 }
 
-Compiler::OutputList RootManager::install(const Compiler::OutputList &output, const QString &project)
+Compiler::OutputList RootManager::install(const Compiler::OutputList &output, const QString &project) const
 {
 	using namespace Compiler;
 	
@@ -71,7 +71,7 @@ Compiler::OutputList RootManager::install(const Compiler::OutputList &output, co
 	return OutputList();
 }
 
-bool RootManager::uninstall(const QString &project)
+bool RootManager::uninstall(const QString &project) const
 {
 	bool success = true;
 	const QDir projBinDir(bin().filePath(project));
@@ -85,13 +85,13 @@ bool RootManager::uninstall(const QString &project)
 	return success;
 }
 
-bool RootManager::clean()
+bool RootManager::clean() const
 {
 	QDir rootDir(m_root);
 	return removeDir(binPath()) && removeDir(libPath()) && removeDir(includePath());
 }
 
-bool RootManager::removeDir(const QString &path)
+bool RootManager::removeDir(const QString &path) const
 {
 	bool success = true;
 	QDir directory(path);
@@ -107,36 +107,36 @@ bool RootManager::removeDir(const QString &path)
 	return success;
 }
 
-QDir RootManager::bin()
+QDir RootManager::bin() const
 {
 	return QDir(binPath());
 }
 
-QDir RootManager::lib()
+QDir RootManager::lib() const
 {
 	return QDir(libPath());
 }
 
-QDir RootManager::include()
+QDir RootManager::include() const
 {
 	return QDir(includePath());
 }
 
-QString RootManager::binPath()
+QString RootManager::binPath() const
 {
 	QDir d(m_root);
 	d.makeAbsolute();
 	return d.filePath("bin");
 }
 
-QString RootManager::libPath()
+QString RootManager::libPath() const
 {
 	QDir d(m_root);
 	d.makeAbsolute();
 	return d.filePath("lib");
 }
 
-QString RootManager::includePath()
+QString RootManager::includePath() const
 {
 	QDir d(m_root);
 	d.makeAbsolute();
