@@ -15,18 +15,18 @@ namespace Compiler
 		Compiler::OutputList install(const Compiler::OutputList &output, const QString &project) const;
 		bool uninstall(const QString &project) const;
 		bool clean() const;
-		
-		QStringList projectLibPaths() const;
 
 		QStringList libDirectories() const;
 
-		QDir bin() const;
-		QDir lib() const;
-		QDir include() const;
+		QDir bin(const QString &name = QString()) const;
+		QDir lib(const QString &name = QString()) const;
+		QDir include(const QString &name = QString()) const;
 
-		virtual QString binPath() const;
-		virtual QString libPath() const;
-		virtual QString includePath() const;
+		virtual QString binPath(const QString &name = QString()) const;
+		virtual QString libPath(const QString &name = QString()) const;
+		virtual QString includePath(const QString &name = QString()) const;
+		
+		
 
 	private:
 		bool removeDir(const QString &path) const;

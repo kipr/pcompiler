@@ -116,43 +116,38 @@ bool RootManager::removeDir(const QString &path) const
 	return success;
 }
 
-QStringList RootManager::projectLibPaths() const
+QDir RootManager::bin(const QString &name) const
 {
-	return lib().entryList(QDir::NoDot | QDir::NoDotDot | QDir::Dirs);
+	return QDir(binPath(name));
 }
 
-QDir RootManager::bin() const
+QDir RootManager::lib(const QString &name) const
 {
-	return QDir(binPath());
+	return QDir(libPath(name));
 }
 
-QDir RootManager::lib() const
+QDir RootManager::include(const QString &name) const
 {
-	return QDir(libPath());
+	return QDir(includePath(name));
 }
 
-QDir RootManager::include() const
-{
-	return QDir(includePath());
-}
-
-QString RootManager::binPath() const
+QString RootManager::binPath(const QString &name) const
 {
 	QDir d(m_root);
 	d.makeAbsolute();
-	return d.filePath("bin");
+	return d.filePath("bin" + (name.isEmpty() ? QString() : ("/" + name)));
 }
 
-QString RootManager::libPath() const
+QString RootManager::libPath(const QString &name) const
 {
 	QDir d(m_root);
 	d.makeAbsolute();
-	return d.filePath("lib");
+	return d.filePath("lib" + (name.isEmpty() ? QString() : ("/" + name)));
 }
 
-QString RootManager::includePath() const
+QString RootManager::includePath(const QString &name) const
 {
 	QDir d(m_root);
 	d.makeAbsolute();
-	return d.filePath("include");
+	return d.filePath("include" + (name.isEmpty() ? QString() : ("/" + name)));
 }

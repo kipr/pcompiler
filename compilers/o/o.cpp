@@ -27,18 +27,20 @@ Output O::produceBinary(const QStringList& input, Options& options) const
 	QString output = (options.contains(OUTPUT_DIR) ? options[OUTPUT_DIR] : QFileInfo(input[0]).absolutePath())
 		+ "/" + name + (ext.isEmpty() ? "" : "." + ext);
 	
+	Options localOptions = options;
+	
 	Options::const_iterator it = options.find("PROJECT_DEPS");
 	if(it != options.end()) {
 		QStringList addOFlags;
 		foreach(QString dep, OptionParser::arguments(it.value())) {
-			addOFlags << "-L${USER_ROOT}/lib/" + dep;
-			addOFlags << "-l" + dep;
+			addOFlags << "\"-L${USER_ROOT}/lib/" + dep + "\"";
+			addOFlags << "\"-l" + dep + "\"";
 		}
-		options.insert(O_FLAGS, options.value(O_FLAGS) + addOFlags.join(" "));
-		options.expand();
+		localOptions.insert(O_FLAGS, options.value(O_FLAGS) + addOFlags.join(" "));
+		localOptions.expand();
 	}
 
-	QString rawFlags = options[O_FLAGS].trimmed();
+	QString rawFlags = localOptions[O_FLAGS].trimmed();
 	QStringList flags = OptionParser::arguments(rawFlags);
 
 	QStringList args;
@@ -59,11 +61,13 @@ Output O::produceBinary(const QStringList& input, Options& options) const
 	return ret;
 }
 
-Output O::produceLibrary(const QStringList& input, Options& options) const
+Output O::produceLibrary(const QStringList& input, Options &options) const
 {
 	QProcess linker;
 	Output ret;
 	ret.setFiles(input);
+	
+	Options localOptions = options;
 	
 	const QString ext = Platform::libExtension();
 	const QString name = input.size() == 1 ? QFileInfo(input[0]).baseName() : "library";
@@ -74,15 +78,20 @@ Output O::produceLibrary(const QStringList& input, Options& options) const
 	if(it != options.end()) {
 		QStringList addOFlags;
 		foreach(QString dep, OptionParser::arguments(it.value())) {
-			addOFlags << "-L${USER_ROOT}/lib/" + dep;
-			addOFlags << "-l" + dep;
+			addOFlags << "\"-L${USER_ROOT}/lib/" + dep + "\"";
+			addOFlags << "\"-l" + dep + "\"";
+			qDebug() << "ADDING OPTIONS for " << name;
 		}
-		options.insert(O_FLAGS, options.value(O_FLAGS) + addOFlags.join(" "));
-		options.expand();
+		QString oFlags = localOptions.value(O_FLAGS);
+		qDebug() << "SDFADFASD" << oFlags;
+		localOptions.insert(O_FLAGS, oFlags + " " + addOFlags.join(" "));
+		localOptions.expand();
 	}
 
-	QString rawFlags = options[O_FLAGS].trimmed();
+	QString rawFlags = localOptions[O_FLAGS].trimmed();
+	qDebug() << rawFlags;
 	QStringList flags = OptionParser::arguments(rawFlags);
+	qDebug() << flags;
 
 	QStringList args;
 	args << "-shared" << "-o" << output << input << flags;
