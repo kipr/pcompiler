@@ -26,7 +26,7 @@ QString Platform::cppPath()
 
 QString Platform::libExtension()
 {
-#ifndef Q_OS_WIN
+#ifdef Q_OS_WIN
 	return "dll";
 #elif defined(Q_OS_MAC)
 	return "dylib";

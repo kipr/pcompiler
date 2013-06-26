@@ -15,6 +15,8 @@ namespace Compiler
 		Compiler::OutputList install(const Compiler::OutputList &output, const QString &project) const;
 		bool uninstall(const QString &project) const;
 		bool clean() const;
+		
+		QStringList projectLibPaths() const;
 
 		QDir bin() const;
 		QDir lib() const;

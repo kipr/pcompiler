@@ -107,6 +107,11 @@ bool RootManager::removeDir(const QString &path) const
 	return success;
 }
 
+QStringList RootManager::projectLibPaths() const
+{
+	return lib().entryList(QDir::NoDot | QDir::NoDotDot | QDir::Dirs);
+}
+
 QDir RootManager::bin() const
 {
 	return QDir(binPath());
