@@ -18,6 +18,8 @@ namespace Compiler
 		
 		QStringList projectLibPaths() const;
 
+		QStringList libDirectories() const;
+
 		QDir bin() const;
 		QDir lib() const;
 		QDir include() const;

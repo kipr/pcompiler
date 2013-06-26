@@ -91,6 +91,15 @@ bool RootManager::clean() const
 	return removeDir(binPath()) && removeDir(libPath()) && removeDir(includePath());
 }
 
+QStringList RootManager::libDirectories() const
+{
+	QStringList ret;
+	const QFileInfoList &dirs = lib().entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
+	foreach(const QFileInfo &dir, dirs) ret << dir.absoluteFilePath();
+
+	return ret;
+}
+
 bool RootManager::removeDir(const QString &path) const
 {
 	bool success = true;
