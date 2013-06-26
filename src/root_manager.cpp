@@ -68,9 +68,9 @@ Compiler::OutputList RootManager::install(const Compiler::OutputList &output, co
 bool RootManager::uninstall(const QString &root, const QString &project)
 {
 	bool success = true;
-	const QDir projBinDir(QDir(binPath(root)).filePath(project));
-	const QDir projLibDir(QDir(libPath(root)).filePath(project));
-	const QDir projIncludeDir(QDir(includePath(root)).filePath(project));
+	const QDir projBinDir(bin(root).filePath(project));
+	const QDir projLibDir(lib(root).filePath(project));
+	const QDir projIncludeDir(include(root).filePath(project));
 	
 	success &= removeDir(projBinDir.absolutePath());
 	success &= removeDir(projLibDir.absolutePath());

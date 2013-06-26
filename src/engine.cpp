@@ -52,11 +52,6 @@ OutputList Engine::compile(const Input& input, Options& options, Progress *progr
 	QList<const Base *> workingCompilers(m_compilers);
 	OutputList ret;
 	
-	/*qDebug() << workingCompilers.size() << "compilers";
-	foreach(const Base *compiler, workingCompilers) {
-		qDebug() << compiler->name();
-	}*/
-	
 	options.expand();
 	
 	double processed = 0;
