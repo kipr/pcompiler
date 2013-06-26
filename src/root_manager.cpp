@@ -33,8 +33,8 @@ Compiler::OutputList RootManager::install(const Compiler::OutputList &output, co
 			switch(term.terminal()) {
 				case Output::NotTerminal: break;
 				case Output::BinaryTerminal:
-					dest = bin.filePath(fileInfo.suffix().isEmpty() ? project : project + "."
-						+ fileInfo.suffix());
+					dest = bin.filePath(fileInfo.suffix().isEmpty()
+						? project : project + "." + fileInfo.suffix());
 					break;
 				case Output::LibraryTerminal:
 					dest = lib.filePath("lib" + (fileInfo.suffix().isEmpty()
