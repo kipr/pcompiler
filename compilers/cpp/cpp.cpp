@@ -50,7 +50,7 @@ Output Cpp::transform(const QString& file, Options& options) const
 	QString output = options.contains(TEMPORARY_DIR) ? options[TEMPORARY_DIR] : fileInfo.absolutePath();
 	output += "/" + fileInfo.fileName() + ".o";
 
-	options.insert("CPP_FLAGS", options.value("CPP_FLAGS") + " -I${USER_ROOT}/include");
+	options.insert("CPP_FLAGS", options.value("CPP_FLAGS") + " \"-I${USER_ROOT}/include\"");
 	options.expand();
 
 	QString rawFlags = options[CPP_FLAGS].trimmed();
