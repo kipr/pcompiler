@@ -96,6 +96,15 @@ QStringList RootManager::libDirectories() const
 	return lib().entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 }
 
+QStringList RootManager::libDirectoryPaths() const
+{
+	QStringList paths;
+	QFileInfoList infos = lib().entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
+	foreach(const QFileInfo &info, infos) paths << info.absoluteFilePath();
+
+	return paths;
+}
+
 bool RootManager::removeDir(const QString &path) const
 {
 	bool success = true;

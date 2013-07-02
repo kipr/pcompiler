@@ -17,6 +17,7 @@ namespace Compiler
 		bool clean() const;
 
 		QStringList libDirectories() const;
+		QStringList libDirectoryPaths() const;
 
 		QDir bin(const QString &name = QString()) const;
 		QDir lib(const QString &name = QString()) const;
