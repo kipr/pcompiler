@@ -37,11 +37,9 @@ QString Platform::libExtension()
 
 QString Platform::exeExtension()
 {
-	return
 #ifdef Q_OS_WIN
-	"exe"
+	return "exe";
 #else
-	""
+	return "";
 #endif
-	;
 }
