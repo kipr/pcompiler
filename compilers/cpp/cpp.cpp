@@ -10,6 +10,7 @@
 using namespace Compiler;
 
 #define CPP_FLAGS "CPP_FLAGS"
+#define PLATFORM_CPP_FLAGS Platform::platform() + "_" + CPP_FLAGS
 
 Hpp::Hpp()
 	: Passthrough("h++", QStringList() << "hpp" << "hxx" << "hh")
@@ -34,6 +35,11 @@ Cpp::Cpp()
 
 OutputList Cpp::transform(const QStringList& input, Options& options) const
 {
+	Options::const_iterator it = options.find(PLATFORM_CPP_FLAGS);
+	if(it != options.end()) {
+		options.insert(CPP_FLAGS, options.value(CPP_FLAGS) + " " + it.value());
+	}
+
 	OutputList ret;
 	foreach(const QString& file, input) ret << transform(file, options);
 	return ret;
@@ -41,11 +47,10 @@ OutputList Cpp::transform(const QStringList& input, Options& options) const
 
 Output Cpp::transform(const QString& file, Options& options) const
 {
+	QProcess compiler;
 	Output ret;
 	QFileInfo fileInfo(file);
 	ret.setFile(file);
-	
-	QProcess compiler;
 	
 	QString output = options.contains(TEMPORARY_DIR) ? options[TEMPORARY_DIR] : fileInfo.absolutePath();
 	output += "/" + fileInfo.fileName() + ".o";
