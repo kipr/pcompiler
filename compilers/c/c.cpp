@@ -35,6 +35,9 @@ C::C()
 
 OutputList C::transform(const QStringList& input, Options& options) const
 {
+	options.insert(C_FLAGS, options.value(C_FLAGS) + " \"-I${USER_ROOT}/include\"");
+	options.expand();
+
 	Options::const_iterator it = options.find(PLATFORM_C_FLAGS);
 	if(it != options.end()) {
 		options.insert(C_FLAGS, options.value(C_FLAGS) + " " + it.value());
@@ -54,9 +57,6 @@ Output C::transform(const QString& file, Options& options) const
 	
 	QString output = options.contains(TEMPORARY_DIR) ? options[TEMPORARY_DIR] : fileInfo.absolutePath();
 	output += "/" + fileInfo.fileName() + ".o";
-
-	options.insert(C_FLAGS, options.value(C_FLAGS) + " \"-I${USER_ROOT}/include\"");
-	options.expand();
 
 	QString rawFlags = options[C_FLAGS].trimmed();
 	QStringList flags = OptionParser::arguments(rawFlags);
