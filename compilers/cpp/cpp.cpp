@@ -16,7 +16,7 @@ Hpp::Hpp()
 	: Passthrough("h++", QStringList() << "hpp" << "hxx" << "hh")
 {}
 
-OutputList Hpp::transform(const QStringList& input, Options& options) const
+OutputList Hpp::transform(const QStringList &input, Options &options) const
 {
 	Output ret;
 	ret.setFiles(input);
@@ -33,7 +33,7 @@ Cpp::Cpp()
 {
 }
 
-OutputList Cpp::transform(const QStringList& input, Options& options) const
+OutputList Cpp::transform(const QStringList &input, Options &options) const
 {
 	options.insert(CPP_FLAGS, options.value(CPP_FLAGS) + " \"-I${USER_ROOT}/include\"");
 	options.expand();
@@ -44,11 +44,11 @@ OutputList Cpp::transform(const QStringList& input, Options& options) const
 	}
 
 	OutputList ret;
-	foreach(const QString& file, input) ret << transform(file, options);
+	foreach(const QString &file, input) ret << transform(file, options);
 	return ret;
 }
 
-Output Cpp::transform(const QString& file, Options& options) const
+Output Cpp::transform(const QString &file, Options &options) const
 {
 	QProcess compiler;
 	Output ret;

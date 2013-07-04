@@ -16,7 +16,7 @@ H::H()
 	: Passthrough("h", QStringList() << "h")
 {}
 
-OutputList H::transform(const QStringList& input, Options& options) const
+OutputList H::transform(const QStringList &input, Options &options) const
 {
 	Output ret;
 	ret.setFiles(input);
@@ -33,7 +33,7 @@ C::C()
 {
 }
 
-OutputList C::transform(const QStringList& input, Options& options) const
+OutputList C::transform(const QStringList &input, Options &options) const
 {
 	options.insert(C_FLAGS, options.value(C_FLAGS) + " \"-I${USER_ROOT}/include\"");
 	options.expand();
@@ -44,11 +44,11 @@ OutputList C::transform(const QStringList& input, Options& options) const
 	}
 
 	OutputList ret;
-	foreach(const QString& file, input) ret << transform(file, options);
+	foreach(const QString &file, input) ret << transform(file, options);
 	return ret;
 }
 
-Output C::transform(const QString& file, Options& options) const
+Output C::transform(const QString &file, Options &options) const
 {
 	QProcess compiler;
 	Output ret;

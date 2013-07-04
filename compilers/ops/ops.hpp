@@ -10,7 +10,7 @@ namespace Compiler
 	public:
 		Ops();
 		
-		virtual OutputList transform(const QStringList& input, Options& options) const;
+		virtual OutputList transform(const QStringList &input, Options &options) const;
 	};
 }
 

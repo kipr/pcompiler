@@ -8,9 +8,9 @@ Ops::Ops()
 {
 }
 
-OutputList Ops::transform(const QStringList& input, Options& options) const
+OutputList Ops::transform(const QStringList &input, Options &options) const
 {
-	foreach(const QString& file, input) {
+	foreach(const QString &file, input) {
 		Options projOptions = Options::load(file);
 
 		QMap<QString, QString>::const_iterator it = projOptions.constBegin();

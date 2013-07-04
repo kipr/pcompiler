@@ -20,7 +20,7 @@ O::O()
 {
 }
 
-Output O::produceBinary(const QStringList& input, Options& options) const
+Output O::produceBinary(const QStringList &input, Options &options) const
 {
 	QProcess linker;
 	Output ret;
@@ -70,7 +70,7 @@ Output O::produceBinary(const QStringList& input, Options& options) const
 	return ret;
 }
 
-Output O::produceLibrary(const QStringList& input, Options &options) const
+Output O::produceLibrary(const QStringList &input, Options &options) const
 {
 	QProcess linker;
 	Output ret;
@@ -120,7 +120,7 @@ Output O::produceLibrary(const QStringList& input, Options &options) const
 	return ret;
 }
 
-OutputList O::transform(const QStringList& input, Options& options) const
+OutputList O::transform(const QStringList &input, Options &options) const
 {
 	Options::const_iterator it = options.find(TERMINAL_TYPE);
 	if(it != options.end() && it.value() == LIBRARY) {

@@ -16,7 +16,7 @@ Java::Java()
 {
 }
 
-OutputList Java::transform(const QStringList& input, Options& options) const
+OutputList Java::transform(const QStringList &input, Options &options) const
 {
 	Output ret;
 	ret.setFiles(input);
