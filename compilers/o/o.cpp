@@ -45,8 +45,6 @@ Output O::produceBinary(const QStringList& input, Options& options) const
 	QString rawFlags = localOptions[O_FLAGS].trimmed();
 	QStringList flags = OptionParser::arguments(rawFlags);
 
-	qDebug() << "FINAL:" << flags;
-
 	const QString ext = Platform::exeExtension();
 	const QString name = input.size() == 1 ? QFileInfo(input[0]).baseName() : "executable";
 	const QString output = (localOptions.contains(OUTPUT_DIR) ? localOptions[OUTPUT_DIR] : QFileInfo(input[0]).absolutePath())
@@ -57,7 +55,7 @@ Output O::produceBinary(const QStringList& input, Options& options) const
 
 	linker.start(Platform::cppPath(), args);
 	if(!linker.waitForStarted()) {
-		return Output(Platform::ccPath(), 1, "", "error: couldn't start linker to produce binary\n");
+		return Output(Platform::cppPath(), 1, "", "error: couldn't start linker to produce binary\n");
 	}
 	linker.waitForFinished();
 	
@@ -107,7 +105,7 @@ Output O::produceLibrary(const QStringList& input, Options &options) const
 
 	linker.start(Platform::cppPath(), args);
 	if(!linker.waitForStarted()) {
-		return Output(Platform::ccPath(), 1, "", "error: couldn't start linker to produce library\n");
+		return Output(Platform::cppPath(), 1, "", "error: couldn't start linker to produce library\n");
 	}
 	linker.waitForFinished();
 	
