@@ -6,6 +6,17 @@
 
 using namespace Compiler;
 
+QString Platform::platform()
+{
+#ifdef Q_OS_WIN
+	return "WIN";
+#elif defined(Q_OS_MAC)
+	return "MAC";
+#else
+	return "NIX";
+#endif
+}
+
 QString Platform::ccPath()
 {
 #ifndef Q_OS_WIN

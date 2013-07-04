@@ -8,6 +8,7 @@ namespace Compiler
 	class Platform
 	{
 	public:
+		static QString platform();
 		static QString ccPath();
 		static QString cppPath();
 		static QString libExtension();
