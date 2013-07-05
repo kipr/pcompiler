@@ -14,9 +14,11 @@ using namespace Compiler;
 #define PROJECT_DEPS "PROJECT_DEPS"
 #define TERMINAL_TYPE "TERMINAL_TYPE"
 #define LIBRARY "LIBRARY"
+#define LIBRARY_NAME "LIBRARY_NAME"
 
 O::O()
-	: Base("ld (c++)", QStringList() << "o", 1, QStringList() << O_FLAGS << OUTPUT_DIR)
+	: Base("ld (c++)", QStringList() << "o", 1, QStringList()
+		<< O_FLAGS << OUTPUT_DIR << LIBRARY_NAME)
 {
 }
 
@@ -37,12 +39,8 @@ Output O::produceBinary(const QStringList &input, Options &options) const
 	if(depsIt != localOptions.end()) {
 		QStringList addOFlags;
 		foreach(const QString &dep, OptionParser::arguments(depsIt.value())) {
-#ifndef _WIN32
 			addOFlags << "\"-L${USER_ROOT}/lib/" + dep + "\"";
 			addOFlags << "\"-l" + dep + "\"";
-#else
-			addOFlags << "\"${USER_ROOT}/lib/" + dep + "/lib" + dep + ".dll\"";
-#endif
 		}
 		localOptions.insert(O_FLAGS, localOptions.value(O_FLAGS) + " " + addOFlags.join(" "));
 		localOptions.expand();
@@ -52,7 +50,9 @@ Output O::produceBinary(const QStringList &input, Options &options) const
 	QStringList flags = OptionParser::arguments(rawFlags);
 
 	const QString ext = Platform::exeExtension();
-	const QString name = input.size() == 1 ? QFileInfo(input[0]).baseName() : "executable";
+	const QString name = localOptions.contains(LIBRARY_NAME) ?
+		localOptions[LIBRARY_NAME] :
+		(input.size() == 1 ? QFileInfo(input[0]).baseName() : "executable");
 	const QString output = (localOptions.contains(OUTPUT_DIR) ? localOptions[OUTPUT_DIR] : QFileInfo(input[0]).absolutePath())
 		+ "/" + name + (ext.isEmpty() ? "" : "." + ext);
 

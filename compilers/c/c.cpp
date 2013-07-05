@@ -60,7 +60,11 @@ Output C::transform(const QString &file, Options &options) const
 
 	QString rawFlags = options[C_FLAGS].trimmed();
 	QStringList flags = OptionParser::arguments(rawFlags);
-	compiler.start(Platform::ccPath(), flags << "-fPIC" << "-c" << file << "-o" << output);
+	compiler.start(Platform::ccPath(), flags <<
+#ifndef _WIN32
+		"-fPIC" <<
+#endif
+		"-c" << file << "-o" << output);
 	if(!compiler.waitForStarted()) {
 		ret = Output(Platform::ccPath(), 1, "", "error: couldn't start the C compiler\n");
 		return ret;
