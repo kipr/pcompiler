@@ -103,7 +103,9 @@ Output O::produceLibrary(const QStringList &input, Options &options) const
 	QStringList flags = OptionParser::arguments(rawFlags);
 
 	const QString ext = Platform::libExtension();
-	const QString name = input.size() == 1 ? QFileInfo(input[0]).baseName() : "library";
+	const QString name = localOptions.contains(LIBRARY_NAME) ?
+		localOptions[LIBRARY_NAME] :
+		(input.size() == 1 ? QFileInfo(input[0]).baseName() : "library");
 	const QString output = (localOptions.contains(OUTPUT_DIR) ? localOptions[OUTPUT_DIR] : QFileInfo(input[0]).absolutePath())
 		+ "/" + name + (ext.isEmpty() ? "" : "." + ext);
 
@@ -115,6 +117,14 @@ Output O::produceLibrary(const QStringList &input, Options &options) const
 		return Output(Platform::cppPath(), 1, "", "error: couldn't start linker to produce library\n");
 	}
 	linker.waitForFinished();
+
+	// Fix rpath
+#ifdef Q_OS_MAC
+	{
+		QProcess installNames;
+		installNames.run("install_names_tool")
+	}
+#endif
 	
 	ret.setExitCode(linker.exitCode());
 	ret.setOutput(linker.readAllStandardOutput());
