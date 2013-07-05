@@ -42,9 +42,12 @@ Compiler::OutputList RootManager::install(const Compiler::OutputList &output, co
 					dest = binDir.filePath(fileInfo.suffix().isEmpty()
 						? project : project + "." + fileInfo.suffix());
 					break;
-				case Output::LibraryTerminal:
+				case Output::DependencyTerminal:
 					dest = libDir.filePath("lib" + (fileInfo.suffix().isEmpty()
 						? project : project + "." + fileInfo.suffix()));
+					break;
+				case Output::LibraryTerminal:
+					dest = libDir.filePath(fileInfo.fileName());
 					break;
 				case Output::HeaderTerminal:
 					dest = includeDir.filePath(fileInfo.fileName());

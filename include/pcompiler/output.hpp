@@ -20,6 +20,7 @@ namespace Compiler
 		enum TerminalType {
 			NotTerminal,
 			BinaryTerminal,
+			DependencyTerminal,
 			LibraryTerminal,
 			HeaderTerminal
 		};

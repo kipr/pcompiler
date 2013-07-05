@@ -4,6 +4,7 @@
 #include "../common/options.hpp"
 
 #include <QFileInfo>
+#include <QDir>
 #include <QProcess>
 #include <QDebug>
 
@@ -115,7 +116,7 @@ Output O::produceLibrary(const QStringList &input, Options &options) const
 	ret.setOutput(linker.readAllStandardOutput());
 	ret.setError(linker.readAllStandardError());
 	ret.setGeneratedFiles(QStringList() << output);
-	ret.setTerminal(Output::LibraryTerminal);
+	ret.setTerminal(Output::DependencyTerminal);
 
 	return ret;
 }
