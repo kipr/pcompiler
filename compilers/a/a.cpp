@@ -16,9 +16,9 @@ A::A()
 
 OutputList A::transform(const QStringList &input, Options &options) const
 {
-	foreach(const QString &file, input)
-		transform(file, options);
-	return OutputList();
+	OutputList list;
+	foreach(const QString &file, input) list << transform(file, options);
+	return list;
 }
 
 Output A::transform(const QString &file, Options &options) const
@@ -28,8 +28,8 @@ Output A::transform(const QString &file, Options &options) const
 	QFileInfo fileInfo(file);
 	const QString dir = options.contains(TEMPORARY_DIR) ? options[TEMPORARY_DIR] : fileInfo.absolutePath();
 
-	compiler.setProcessChannelMode(QProcess::ForwardedChannels);
-	compiler.start(Platform::arPath(), QStringList() << "-xv" << file);
+	compiler.setWorkingDirectory(dir);
+	compiler.start(Platform::arPath(), QStringList() << "-x" << file);
 	if(!compiler.waitForStarted()) {
 		ret = Output(Platform::arPath(), 1, "", "error: couldn't start the ar process\n");
 		return ret;
@@ -38,11 +38,7 @@ Output A::transform(const QString &file, Options &options) const
 
 	const QStringList filesList = files(file);
 	QStringList pathsList;
-	for(int i = 0; i < filesList.size(); ++i) {
-		pathsList << (dir + "/" + filesList.at(i));
-	}
-
-	qDebug() << "dir contents:" << QDir(dir).entryList();
+	for(int i = 0; i < filesList.size(); ++i) pathsList << (dir + "/" + filesList.at(i));
 	
 	ret.setFile(file);
 	ret.setExitCode(compiler.exitCode());
