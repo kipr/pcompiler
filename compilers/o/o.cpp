@@ -35,8 +35,12 @@ Output O::produceBinary(const QStringList& input, Options& options) const
 	if(depsIt != localOptions.end()) {
 		QStringList addOFlags;
 		foreach(const QString &dep, OptionParser::arguments(depsIt.value())) {
+#ifndef _WIN32
 			addOFlags << "\"-L${USER_ROOT}/lib/" + dep + "\"";
 			addOFlags << "\"-l" + dep + "\"";
+#else
+			addOFlags << "\"${USER_ROOT}/lib/" + dep + "/lib" + dep + ".dll\"";
+#endif
 		}
 		localOptions.insert(O_FLAGS, localOptions.value(O_FLAGS) + " " + addOFlags.join(" "));
 		localOptions.expand();
