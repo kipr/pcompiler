@@ -10,10 +10,10 @@ namespace Compiler
 	public:
 		O();
 		
-		virtual OutputList transform(const QStringList& input, Options& options) const;
+		virtual OutputList transform(const QStringList &input, Options &options) const;
 	private:
-		Output produceBinary(const QStringList& input, Options& options) const;
-		Output produceLibrary(const QStringList& input, Options& options) const;
+		Output produceBinary(const QStringList &input, Options &options) const;
+		Output produceLibrary(const QStringList &input, Options &options) const;
 	};
 }
 

@@ -12,13 +12,15 @@ using namespace Compiler;
 #define O_FLAGS "LD_FLAGS"
 #define PLATFORM_O_FLAGS Platform::platform() + "_" + O_FLAGS
 #define PROJECT_DEPS "PROJECT_DEPS"
+#define TERMINAL_TYPE "TERMINAL_TYPE"
+#define LIBRARY "LIBRARY"
 
 O::O()
 	: Base("ld (c++)", QStringList() << "o", 1, QStringList() << O_FLAGS << OUTPUT_DIR)
 {
 }
 
-Output O::produceBinary(const QStringList& input, Options& options) const
+Output O::produceBinary(const QStringList &input, Options &options) const
 {
 	QProcess linker;
 	Output ret;
@@ -72,7 +74,7 @@ Output O::produceBinary(const QStringList& input, Options& options) const
 	return ret;
 }
 
-Output O::produceLibrary(const QStringList& input, Options &options) const
+Output O::produceLibrary(const QStringList &input, Options &options) const
 {
 	QProcess linker;
 	Output ret;
@@ -122,9 +124,14 @@ Output O::produceLibrary(const QStringList& input, Options &options) const
 	return ret;
 }
 
-OutputList O::transform(const QStringList& input, Options& options) const
+OutputList O::transform(const QStringList &input, Options &options) const
 {
-	return OutputList() << produceBinary(input, options) << produceLibrary(input, options);
+	Options::const_iterator it = options.find(TERMINAL_TYPE);
+	if(it != options.end() && it.value() == LIBRARY) {
+		return OutputList() << produceLibrary(input, options);
+	}
+
+	return OutputList() << produceBinary(input, options);
 }
 
 REGISTER_COMPILER(O)

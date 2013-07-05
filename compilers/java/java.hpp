@@ -9,7 +9,7 @@ namespace Compiler
 	{
 	public:
 		Java();
-		virtual OutputList transform(const QStringList& input, Options& options) const;
+		virtual OutputList transform(const QStringList &input, Options &options) const;
 	private:
 		static QString javacPath();
 	};

@@ -8,8 +8,8 @@ namespace Compiler
 	class Passthrough : public Base
 	{
 	public:
-		Passthrough(const QString& name, const QStringList& extensions);
-		virtual OutputList transform(const QStringList& input, Options& options) const;
+		Passthrough(const QString &name, const QStringList &extensions);
+		virtual OutputList transform(const QStringList &input, Options &options) const;
 	};
 }
 

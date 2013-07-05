@@ -16,7 +16,7 @@ Lisp::Lisp()
 {
 }
 
-OutputList Lisp::transform(const QStringList& input, Options& options) const
+OutputList Lisp::transform(const QStringList &input, Options &options) const
 {
 	Output ret;
 	ret.setExitCode(1);
