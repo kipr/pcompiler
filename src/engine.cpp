@@ -50,6 +50,8 @@ OutputList Engine::compile(const Input& input, Options& options, Progress *progr
 {
 	Input workingInput(input);
 	QList<const Base *> workingCompilers(m_compilers);
+	foreach(const Base *base, workingCompilers)
+		qDebug() << "compiler:" << base->name();
 	OutputList ret;
 	
 	options.expand();

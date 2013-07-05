@@ -17,6 +17,15 @@ QString Platform::platform()
 #endif
 }
 
+QString Platform::arPath()
+{
+#ifndef Q_OS_WIN
+	return "/usr/bin/ar";
+#else
+	return QDir::currentPath() + "/../MinGW/bin/ar";
+#endif
+}
+
 QString Platform::ccPath()
 {
 #ifndef Q_OS_WIN
