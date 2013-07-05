@@ -66,6 +66,38 @@ Output O::produceBinary(const QStringList &input, Options &options) const
 	}
 	linker.waitForFinished();
 	
+	// Fix rpath
+#ifdef Q_OS_MAC
+	QProcess otool;
+	otool.start("otool", QStringList() << "-L" << output);
+	if(!otool.waitForStarted()) {
+		return Output(Platform::cppPath(), 1, "", "error: couldn't start otool\n");
+	}
+	
+	otool.waitForFinished();
+	QString string = QString(otool.readAllStandardOutput());
+	QStringList lines = string.split("\n");
+	if(lines.size() > 0) lines.removeAt(0);
+	foreach(const QString &line, lines) {
+		const QString part = line.left(line.indexOf("(") - 1).trimmed();
+		if(part.isEmpty()) continue;
+		if(part.startsWith("/var/folder")) {
+			QProcess installNames;
+			QStringList args = QStringList() << "-change" << part << "@rpath/" + QFileInfo(part).fileName() << output;
+			qDebug() << "install_name_tool" << args;
+			installNames.start("install_name_tool", args);
+			if(!installNames.waitForStarted()) {
+				return Output(Platform::cppPath(), 1, "", "error: couldn't start install_name_tool\n");
+			}
+			installNames.waitForFinished();
+			qDebug() << installNames.readAllStandardOutput();
+			qDebug() << installNames.readAllStandardError();
+			qDebug() << installNames.exitCode();
+		}
+		qDebug() << "otool line:" << part;
+	}
+#endif
+	
 	ret.setExitCode(linker.exitCode());
 	ret.setOutput(linker.readAllStandardOutput());
 	ret.setError(linker.readAllStandardError());
@@ -119,13 +151,48 @@ Output O::produceLibrary(const QStringList &input, Options &options) const
 	linker.waitForFinished();
 
 	// Fix rpath
-	/*
 #ifdef Q_OS_MAC
-	{
+	if(localOptions.contains(LIBRARY_NAME)) {
 		QProcess installNames;
-		installNames.run("install_names_tool")
+		QStringList args = QStringList() << "-id" << "lib" + localOptions[LIBRARY_NAME] + ".dylib" << output;
+		qDebug() << "install_name_tool" << args;
+		installNames.start("install_name_tool", args);
+		if(!installNames.waitForStarted()) {
+			return Output(Platform::cppPath(), 1, "", "error: couldn't start install_name_tool\n");
+		}
+		installNames.waitForFinished();
 	}
-#endif*/
+	
+	QProcess otool;
+	otool.start("otool", QStringList() << "-L" << output);
+	if(!otool.waitForStarted()) {
+		return Output(Platform::cppPath(), 1, "", "error: couldn't start otool\n");
+	}
+	
+	otool.waitForFinished();
+	QString string = QString(otool.readAllStandardOutput());
+	QStringList lines = string.split("\n");
+	if(lines.size() > 0) lines.removeAt(0);
+	foreach(const QString &line, lines) {
+		const QString part = line.left(line.indexOf("(") - 1).trimmed();
+		if(part.isEmpty()) continue;
+		if(part.startsWith("/var/folder")) {
+			QProcess installNames;
+			QStringList args = QStringList() << "-change" << part << "@rpath/" + QFileInfo(part).fileName() << output;
+			qDebug() << "install_name_tool" << args;
+			installNames.start("install_name_tool", args);
+			if(!installNames.waitForStarted()) {
+				return Output(Platform::cppPath(), 1, "", "error: couldn't start install_name_tool\n");
+			}
+			installNames.waitForFinished();
+			qDebug() << installNames.readAllStandardOutput();
+			qDebug() << installNames.readAllStandardError();
+			qDebug() << installNames.exitCode();
+		}
+		qDebug() << "otool line:" << part;
+	}
+#endif
+
 	
 	ret.setExitCode(linker.exitCode());
 	ret.setOutput(linker.readAllStandardOutput());
