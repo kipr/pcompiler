@@ -40,10 +40,6 @@ SET(CMAKE_CXX_FLAGS "-Wall")
 IF(APPLE)
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -arch x86_64 -g")
 	LINK_DIRECTORIES(/Library/Frameworks/)
-ELSEIF(UNIX)
-
-ELSEIF(WIN32)
-	SET(CMAKE_CXX_FLAGS "-Wl,--enable-auto-import")
 ENDIF()
 
 ADD_LIBRARY(pcompiler SHARED ${SOURCES})
