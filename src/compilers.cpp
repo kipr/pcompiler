@@ -1,12 +1,6 @@
 #include "pcompiler/compilers.hpp"
 #include "pcompiler/base.hpp"
 
-#include "compilers/c/c.hpp"
-#include "compilers/cpp/cpp.hpp"
-#include "compilers/o/o.hpp"
-
-#include <QDebug>
-
 using namespace Compiler;
 
 Compilers::Compilers()
