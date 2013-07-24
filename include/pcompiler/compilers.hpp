@@ -5,11 +5,13 @@
 #include <QStringList>
 #include <QMap>
 
+#include "export.h"
+
 namespace Compiler
 {
 	class Base;
 	
-	class Compilers
+	class DLL_EXPORT Compilers
 	{
 	public:
 		Compilers();

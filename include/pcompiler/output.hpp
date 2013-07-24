@@ -7,11 +7,13 @@
 #include <QTextStream>
 #include <QMetaType>
 
+#include "export.h"
+
 class QProcess;
 
 namespace Compiler
 {
-	class Output
+	class DLL_EXPORT Output
 	{
 	public:
 		Output();

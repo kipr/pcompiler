@@ -3,6 +3,7 @@
 
 #include "options.hpp"
 #include "output.hpp"
+#include "export.h"
 
 #include <QObject>
 #include <QString>
@@ -11,7 +12,7 @@
 
 namespace Compiler
 {
-	class Base
+	class DLL_EXPORT Base
 	{
 	public:
 		Base(const QString& name, const QStringList& extensions, const int& precedence, const QStringList& flags = QStringList());
