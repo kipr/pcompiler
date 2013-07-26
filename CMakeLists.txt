@@ -22,7 +22,7 @@ include_directories(
 
 if(WIN32)
 include_directories(/include)
-endif(WIN32)
+endif()
 
 file(GLOB INCLUDES ${INCLUDE}/pcompiler/*.hpp)
 file(GLOB SOURCES ${SRC}/*.cpp)
@@ -54,14 +54,14 @@ add_custom_target(osx_install_names ALL
 		QtCore.framework/Versions/4/QtCore
 	WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}
 	DEPENDS pcompiler)
-endif(APPLE)
+endif()
 
 if(WIN32)
 install(FILES ${INCLUDES} DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/include/pcompiler)
 install(TARGETS pcompiler
 	ARCHIVE DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib
 	RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib)
-else(WIN32)
+else()
 install(FILES ${INCLUDES} DESTINATION include/pcompiler)
 install(TARGETS pcompiler LIBRARY DESTINATION lib)
-endif(WIN32)
+endif()
