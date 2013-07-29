@@ -24,8 +24,8 @@ if(WIN32)
 include_directories(/include)
 endif()
 
-file(GLOB INCLUDES ${INCLUDE}/pcompiler/*.hpp)
-file(GLOB SOURCES ${SRC}/*.cpp)
+file(GLOB INCLUDES ${INCLUDE}/pcompiler/*.h ${INCLUDE}/pcompiler/*.hpp)
+file(GLOB SOURCES ${SRC}/*.c ${SRC}/*.cpp)
 file(GLOB_RECURSE COMPILER_SOURCES ${COMPILER}/*.cpp)
 
 set(SOURCES ${SOURCES} ${COMPILER_SOURCES})
