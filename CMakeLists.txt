@@ -33,7 +33,7 @@ set(MOC_SOURCES ${INCLUDES})
 
 qt4_wrap_cpp(SOURCES ${MOC_SOURCES})
 
-set(CMAKE_CXX_FLAGS "-Wall")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
 if(APPLE)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -arch x86_64 -g")
