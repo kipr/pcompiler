@@ -31,9 +31,9 @@ namespace Compiler
 	};
 }
 
-bool operator<(const Compiler::Base& lhs, const Compiler::Base& rhs);
-bool operator>(const Compiler::Base& lhs, const Compiler::Base& rhs);
-bool operator==(const Compiler::Base& lhs, const Compiler::Base& rhs);
+DLL_EXPORT bool operator<(const Compiler::Base& lhs, const Compiler::Base& rhs);
+DLL_EXPORT bool operator>(const Compiler::Base& lhs, const Compiler::Base& rhs);
+DLL_EXPORT bool operator==(const Compiler::Base& lhs, const Compiler::Base& rhs);
 
 #define REGISTER_COMPILER(x) __attribute__((constructor)) \
 static void __##x##_register() \
