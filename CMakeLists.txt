@@ -12,17 +12,7 @@ set(INCLUDE ${pcompiler_SOURCE_DIR}/include)
 set(SRC ${pcompiler_SOURCE_DIR}/src)
 set(COMPILER ${pcompiler_SOURCE_DIR}/compilers)
 
-include_directories(
-	${CMAKE_SOURCE_DIR} 
-	${CMAKE_SOURCE_DIR}/src
-	${pcompiler_SOURCE_DIR}
-	${pcompiler_BINARY_DIR}
-	${INCLUDE}
-)
-
-if(WIN32)
-include_directories(/include)
-endif()
+include_directories(${INCLUDE})
 
 file(GLOB INCLUDES ${INCLUDE}/pcompiler/*.h ${INCLUDE}/pcompiler/*.hpp)
 file(GLOB SOURCES ${SRC}/*.c ${SRC}/*.cpp)
