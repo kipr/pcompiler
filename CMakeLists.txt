@@ -16,7 +16,7 @@ include_directories(${INCLUDE})
 
 file(GLOB INCLUDES ${INCLUDE}/pcompiler/*.h ${INCLUDE}/pcompiler/*.hpp)
 file(GLOB SOURCES ${SRC}/*.c ${SRC}/*.cpp)
-file(GLOB_RECURSE COMPILER_SOURCES ${COMPILER}/*.cpp)
+file(GLOB_RECURSE COMPILER_SOURCES ${COMPILER}/*.c ${COMPILER}/*.cpp)
 
 set(SOURCES ${SOURCES} ${COMPILER_SOURCES})
 set(MOC_SOURCES ${INCLUDES})
