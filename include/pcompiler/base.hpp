@@ -3,7 +3,6 @@
 
 #include "options.hpp"
 #include "output.hpp"
-#include "export.h"
 #include "compat.hpp"
 
 #include <QObject>

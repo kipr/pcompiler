@@ -2,7 +2,7 @@
 #define _PCOMPILER_ROOT_MANAGER_HPP_
 
 #include "pcompiler/output.hpp"
-#include "export.h"
+#include "compat.hpp"
 
 #include <QDir>
 

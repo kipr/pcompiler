@@ -4,7 +4,7 @@
 #include <QMap>
 #include <QString>
 
-#include "export.h"
+#include "compat.hpp"
 
 namespace Compiler
 {

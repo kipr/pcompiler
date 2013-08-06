@@ -5,7 +5,7 @@
 #include <QStringList>
 #include <QMap>
 
-#include "export.h"
+#include "compat.hpp"
 
 namespace Compiler
 {
