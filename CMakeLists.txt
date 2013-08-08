@@ -31,7 +31,7 @@ if(APPLE)
 endif()
 
 set(LIBRARY_OUTPUT_PATH ${pcompiler_SOURCE_DIR}/lib)
-add_library(pcompiler SHARED ${SOURCES})
+add_library(pcompiler SHARED ${SOURCES} ${INCLUDES})
 target_link_libraries(pcompiler ${QT_LIBRARIES})
 
 link_directories(${pcompiler_SOURCE_DIR}/lib)
