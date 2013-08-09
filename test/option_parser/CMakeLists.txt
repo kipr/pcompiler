@@ -1,2 +1,0 @@
-ADD_EXECUTABLE(test_option_parser test_option_parser.cpp)
-TARGET_LINK_LIBRARIES(test_option_parser pcompiler)

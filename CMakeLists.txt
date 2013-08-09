@@ -63,9 +63,6 @@ ADD_CUSTOM_TARGET(osx_install_names ALL
 	DEPENDS pcompiler)
 ENDIF(APPLE)
 
-add_subdirectory(test)
-add_subdirectory(tools)
-
 IF(WIN32)
 install(FILES ${INCLUDES} DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/include/pcompiler)
 INSTALL(TARGETS pcompiler

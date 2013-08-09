@@ -7,7 +7,6 @@
 #include "input.hpp"
 #include "options.hpp"
 #include "output.hpp"
-#include "result.hpp"
 #include "root_manager.hpp"
 
 #endif
