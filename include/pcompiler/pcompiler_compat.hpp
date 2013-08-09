@@ -1,5 +1,5 @@
-#ifndef _COMPAT_HPP_
-#define _COMPAT_HPP_
+#ifndef _PCOMPILER_COMPAT_HPP_
+#define _PCOMPILER_COMPAT_HPP_
 
 #ifdef _MSC_VER
 

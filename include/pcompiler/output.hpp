@@ -7,7 +7,7 @@
 #include <QTextStream>
 #include <QMetaType>
 
-#include "compat.hpp"
+#include "pcompiler_compat.hpp"
 
 class QProcess;
 

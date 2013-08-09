@@ -5,7 +5,7 @@
 #include "output.hpp"
 #include "input.hpp"
 #include "progress.hpp"
-#include "compat.hpp"
+#include "pcompiler_compat.hpp"
 
 #include <QList>
 #include <QSemaphore>

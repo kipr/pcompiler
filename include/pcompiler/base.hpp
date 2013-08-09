@@ -3,7 +3,7 @@
 
 #include "options.hpp"
 #include "output.hpp"
-#include "compat.hpp"
+#include "pcompiler_compat.hpp"
 
 #include <QObject>
 #include <QString>

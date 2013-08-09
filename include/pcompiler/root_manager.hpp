@@ -1,8 +1,8 @@
 #ifndef _PCOMPILER_ROOT_MANAGER_HPP_
 #define _PCOMPILER_ROOT_MANAGER_HPP_
 
-#include "pcompiler/output.hpp"
-#include "compat.hpp"
+#include "output.hpp"
+#include "pcompiler_compat.hpp"
 
 #include <QDir>
 
