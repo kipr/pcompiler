@@ -4,9 +4,11 @@
 #include <QMap>
 #include <QString>
 
+#include "compat.hpp"
+
 namespace Compiler
 {
-	class Options : public QMap<QString, QString>
+	class DLL_EXPORT Options : public QMap<QString, QString>
 	{
 	public:
 		static Options load(const QString& path);
@@ -26,7 +28,7 @@ namespace Compiler
 		QMap<QString, QString> m_vars;
 	};
 	
-	class OptionParser
+	class DLL_EXPORT OptionParser
 	{
 	public:
 		static QStringList arguments(const QString &argumentString);

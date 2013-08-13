@@ -1,13 +1,14 @@
 #ifndef _PCOMPILER_ROOT_MANAGER_HPP_
 #define _PCOMPILER_ROOT_MANAGER_HPP_
 
-#include "pcompiler/output.hpp"
+#include "output.hpp"
+#include "compat.hpp"
 
 #include <QDir>
 
 namespace Compiler
 {
-	class RootManager
+	class DLL_EXPORT RootManager
 	{
 	public:
 		RootManager(const QString &root);
