@@ -1,7 +1,7 @@
 #ifndef _PROGRESS_HPP_
 #define _PROGRESS_HPP_
 
-#include "pcompiler_compat.hpp"
+#include "compat.hpp"
 
 namespace Compiler
 {
