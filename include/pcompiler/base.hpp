@@ -3,6 +3,7 @@
 
 #include "options.hpp"
 #include "output.hpp"
+#include "compat.hpp"
 
 #include <QObject>
 #include <QString>
@@ -11,7 +12,7 @@
 
 namespace Compiler
 {
-	class Base
+	class DLL_EXPORT Base
 	{
 	public:
 		Base(const QString& name, const QStringList& extensions, const int& precedence, const QStringList& flags = QStringList());
@@ -30,12 +31,11 @@ namespace Compiler
 	};
 }
 
-bool operator<(const Compiler::Base& lhs, const Compiler::Base& rhs);
-bool operator>(const Compiler::Base& lhs, const Compiler::Base& rhs);
-bool operator==(const Compiler::Base& lhs, const Compiler::Base& rhs);
+DLL_EXPORT bool operator<(const Compiler::Base& lhs, const Compiler::Base& rhs);
+DLL_EXPORT bool operator>(const Compiler::Base& lhs, const Compiler::Base& rhs);
+DLL_EXPORT bool operator==(const Compiler::Base& lhs, const Compiler::Base& rhs);
 
-#define REGISTER_COMPILER(x) __attribute__((constructor)) \
-static void __##x##_register() \
+#define REGISTER_COMPILER(x) INITIALIZER(__##x##_register) \
 { \
 	Compilers::instance()->addCompiler(new x()); \
 }

@@ -7,11 +7,13 @@
 #include <QTextStream>
 #include <QMetaType>
 
+#include "compat.hpp"
+
 class QProcess;
 
 namespace Compiler
 {
-	class Output
+	class DLL_EXPORT Output
 	{
 	public:
 		Output();
@@ -64,7 +66,7 @@ namespace Compiler
 Q_DECLARE_METATYPE(Compiler::Output);
 Q_DECLARE_METATYPE(Compiler::OutputList);
 
-QDataStream& operator<<(QDataStream& out, const Compiler::Output& rhs);
-QDataStream& operator>>(QDataStream& in, Compiler::Output& rhs);
+DLL_EXPORT QDataStream& operator<<(QDataStream& out, const Compiler::Output& rhs);
+DLL_EXPORT QDataStream& operator>>(QDataStream& in, Compiler::Output& rhs);
 
 #endif

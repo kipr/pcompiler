@@ -1,74 +1,57 @@
-PROJECT(pcompiler)
+project(pcompiler)
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6.0)
+cmake_minimum_required(VERSION 2.8.0)
 
-FIND_PACKAGE(Qt4 REQUIRED)
-
-SET(INCLUDE ${pcompiler_SOURCE_DIR}/include)
-SET(SRC ${pcompiler_SOURCE_DIR}/src)
-
-SET(COMPILER ${pcompiler_SOURCE_DIR}/compilers)
-
-INCLUDE_DIRECTORIES(
-	${CMAKE_SOURCE_DIR} 
-	${CMAKE_SOURCE_DIR}/src
-	${pcompiler_SOURCE_DIR}
-	${pcompiler_BINARY_DIR}
-	${INCLUDE}
-)
-
-IF(WIN32)
-INCLUDE_DIRECTORIES(/include)
-ENDIF(WIN32)
+find_package(Qt4 REQUIRED)
 
 set(QT_DONT_USE_QTGUI TRUE)
 
-INCLUDE(${QT_USE_FILE})
+include(${QT_USE_FILE})
 
-FILE(GLOB INCLUDES ${INCLUDE}/pcompiler/*.hpp)
-FILE(GLOB SOURCES ${SRC}/*.cpp)
+set(INCLUDE ${pcompiler_SOURCE_DIR}/include)
+set(SRC ${pcompiler_SOURCE_DIR}/src)
+set(COMPILER ${pcompiler_SOURCE_DIR}/compilers)
 
-file(GLOB_RECURSE COMPILER_SOURCES ${COMPILER}/*.cpp)
+include_directories(${INCLUDE})
 
-SET(SOURCES ${SOURCES} ${COMPILER_SOURCES})
-SET(MOC_SOURCES ${INCLUDES})
+file(GLOB INCLUDES ${INCLUDE}/pcompiler/*.h ${INCLUDE}/pcompiler/*.hpp)
+file(GLOB SOURCES ${SRC}/*.c ${SRC}/*.cpp)
+file(GLOB_RECURSE COMPILER_SOURCES ${COMPILER}/*.c ${COMPILER}/*.cpp)
 
-QT4_WRAP_CPP(SOURCES ${MOC_SOURCES})
+set(SOURCES ${SOURCES} ${COMPILER_SOURCES})
+set(MOC_SOURCES ${INCLUDES})
 
-SET(CMAKE_CXX_FLAGS "-Wall")
+qt4_wrap_cpp(SOURCES ${MOC_SOURCES})
 
-IF(APPLE)
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -arch x86_64 -g")
-	LINK_DIRECTORIES(/Library/Frameworks/)
-ELSEIF(UNIX)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
-ELSEIF(WIN32)
-	SET(CMAKE_CXX_FLAGS "-Wl,--enable-auto-import")
-ENDIF()
+if(APPLE)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -arch x86_64 -g")
+	link_directories(/Library/Frameworks/)
+endif()
 
-ADD_LIBRARY(pcompiler SHARED ${SOURCES})
+set(LIBRARY_OUTPUT_PATH ${pcompiler_SOURCE_DIR}/lib)
+add_library(pcompiler SHARED ${SOURCES} ${INCLUDES})
+target_link_libraries(pcompiler ${QT_LIBRARIES})
 
-SET(LIBRARY_OUTPUT_PATH ${pcompiler_SOURCE_DIR}/lib)
-TARGET_LINK_LIBRARIES(pcompiler ${QT_LIBRARIES})
+link_directories(${pcompiler_SOURCE_DIR}/lib)
 
-LINK_DIRECTORIES(${pcompiler_SOURCE_DIR}/lib)
-
-IF(APPLE)
-SET(OSX_INSTALL_NAMES_SCRIPT "${pcompiler_SOURCE_DIR}/scripts/osx_install_names.sh")
-SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -headerpad_max_install_names")
-ADD_CUSTOM_TARGET(osx_install_names ALL 
+if(APPLE)
+set(OSX_INSTALL_NAMES_SCRIPT "${pcompiler_SOURCE_DIR}/scripts/osx_install_names.sh")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -headerpad_max_install_names")
+add_custom_target(osx_install_names ALL 
 	COMMAND sh ${OSX_INSTALL_NAMES_SCRIPT} ${LIBRARY_OUTPUT_PATH}/libpcompiler.dylib
 		QtCore.framework/Versions/4/QtCore
 	WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}
 	DEPENDS pcompiler)
-ENDIF(APPLE)
+endif()
 
-IF(WIN32)
+if(WIN32)
 install(FILES ${INCLUDES} DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/include/pcompiler)
-INSTALL(TARGETS pcompiler
+install(TARGETS pcompiler
 	ARCHIVE DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib
 	RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib)
-ELSE(WIN32)
+else()
 install(FILES ${INCLUDES} DESTINATION include/pcompiler)
-INSTALL(TARGETS pcompiler LIBRARY DESTINATION lib)
-ENDIF(WIN32)
+install(TARGETS pcompiler LIBRARY DESTINATION lib)
+endif()
