@@ -35,12 +35,12 @@ Cpp::Cpp()
 
 OutputList Cpp::transform(const QStringList &input, Options &options) const
 {
-	options.insert(CPP_FLAGS, options.value(CPP_FLAGS) + " \"-I${USER_ROOT}/include\"");
+	options.insert(CPP_FLAGS, options.value(CPP_FLAGS).toString() + " \"-I${USER_ROOT}/include\"");
 	options.expand();
 	
 	Options::const_iterator it = options.find(PLATFORM_CPP_FLAGS);
 	if(it != options.end()) {
-		options.insert(CPP_FLAGS, options.value(CPP_FLAGS) + " " + it.value());
+		options.insert(CPP_FLAGS, options.value(CPP_FLAGS).toString() + " " + it.value().toString());
 	}
 
 	OutputList ret;
@@ -55,10 +55,10 @@ Output Cpp::transform(const QString &file, Options &options) const
 	QFileInfo fileInfo(file);
 	ret.setFile(file);
 	
-	QString output = options.contains(TEMPORARY_DIR) ? options[TEMPORARY_DIR] : fileInfo.absolutePath();
+	QString output = options.contains(TEMPORARY_DIR) ? options[TEMPORARY_DIR].toString() : fileInfo.absolutePath();
 	output += "/" + fileInfo.fileName() + ".o";
 
-	QString rawFlags = options[CPP_FLAGS].trimmed();
+	QString rawFlags = options[CPP_FLAGS].toString().trimmed();
 	QStringList flags = OptionParser::arguments(rawFlags);
 	compiler.start(Platform::cppPath(), flags <<
 #ifndef _WIN32

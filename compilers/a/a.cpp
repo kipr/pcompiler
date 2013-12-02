@@ -26,7 +26,7 @@ Output A::transform(const QString &file, Options &options) const
 	QProcess compiler;
 	Output ret;
 	QFileInfo fileInfo(file);
-	const QString dir = options.contains(TEMPORARY_DIR) ? options[TEMPORARY_DIR] : fileInfo.absolutePath();
+	const QString dir = options.contains(TEMPORARY_DIR) ? options[TEMPORARY_DIR].toString() : fileInfo.absolutePath();
 
 	compiler.setWorkingDirectory(dir);
 	compiler.start(Platform::arPath(), QStringList() << "-x" << file);

@@ -12,14 +12,10 @@ using namespace Compiler;
 
 #define O_FLAGS "LD_FLAGS"
 #define PLATFORM_O_FLAGS Platform::platform() + "_" + O_FLAGS
-#define PROJECT_DEPS "PROJECT_DEPS"
-#define TERMINAL_TYPE "TERMINAL_TYPE"
-#define LIBRARY "LIBRARY"
-#define LIBRARY_NAME "LIBRARY_NAME"
 
 O::O()
 	: Base("ld (c++)", QStringList() << "o", 1, QStringList()
-		<< O_FLAGS << OUTPUT_DIR << LIBRARY_NAME)
+		<< O_FLAGS << OUTPUT_DIR << KEY_LIB_NAME)
 {
 }
 
@@ -33,28 +29,29 @@ Output O::produceBinary(const QStringList &input, Options &options) const
 
 	Options::const_iterator it = localOptions.find(PLATFORM_O_FLAGS);
 	if(it != localOptions.end()) {
-		localOptions.insert(O_FLAGS, localOptions.value(O_FLAGS) + " " + it.value());
+		localOptions.insert(O_FLAGS, localOptions.value(O_FLAGS).toString() + " " + it.value().toString());
 	}
 
-	Options::const_iterator depsIt = localOptions.find(PROJECT_DEPS);
+	Options::const_iterator depsIt = localOptions.find(KEY_DEPS);
 	if(depsIt != localOptions.end()) {
 		QStringList addOFlags;
-		foreach(const QString &dep, OptionParser::arguments(depsIt.value())) {
-			addOFlags << "\"-L${USER_ROOT}/lib/" + dep + "\"";
-			addOFlags << "\"-l" + dep + "\"";
+		foreach(const QString &dep, OptionParser::arguments(depsIt.value().toString())) {
+			const QString &depName = QFileInfo(dep).completeBaseName();
+			addOFlags << "\"-L${USER_ROOT}/lib/" + depName + "\"";
+			addOFlags << "\"-l" + depName + "\"";
 		}
-		localOptions.insert(O_FLAGS, localOptions.value(O_FLAGS) + " " + addOFlags.join(" "));
+		localOptions.insert(O_FLAGS, localOptions.value(O_FLAGS).toString() + " " + addOFlags.join(" "));
 		localOptions.expand();
 	}
 
-	QString rawFlags = localOptions[O_FLAGS].trimmed();
+	QString rawFlags = localOptions[O_FLAGS].toString().trimmed();
 	QStringList flags = OptionParser::arguments(rawFlags);
 
 	const QString ext = Platform::exeExtension();
-	const QString name = localOptions.contains(LIBRARY_NAME) ?
-		localOptions[LIBRARY_NAME] :
+	const QString name = localOptions.contains(KEY_LIB_NAME) ?
+		localOptions[KEY_LIB_NAME].toString() :
 		(input.size() == 1 ? QFileInfo(input[0]).baseName() : "executable");
-	const QString output = (localOptions.contains(OUTPUT_DIR) ? localOptions[OUTPUT_DIR] : QFileInfo(input[0]).absolutePath())
+	const QString output = (localOptions.contains(OUTPUT_DIR) ? localOptions[OUTPUT_DIR].toString() : QFileInfo(input[0]).absolutePath())
 		+ "/" + name + (ext.isEmpty() ? "" : "." + ext);
 
 	QStringList args;
@@ -117,28 +114,28 @@ Output O::produceLibrary(const QStringList &input, Options &options) const
 
 	Options::const_iterator it = localOptions.find(PLATFORM_O_FLAGS);
 	if(it != localOptions.end()) {
-		localOptions.insert(O_FLAGS, localOptions.value(O_FLAGS) + " " + it.value());
+		localOptions.insert(O_FLAGS, localOptions.value(O_FLAGS).toString() + " " + it.value().toString());
 	}
 	
-	Options::const_iterator depsIt = localOptions.find(PROJECT_DEPS);
+	Options::const_iterator depsIt = localOptions.find(KEY_DEPS);
 	if(depsIt != localOptions.end()) {
 		QStringList addOFlags;
-		foreach(const QString &dep, OptionParser::arguments(depsIt.value())) {
+		foreach(const QString &dep, OptionParser::arguments(depsIt.value().toString())) {
 			addOFlags << "\"-L${USER_ROOT}/lib/" + dep + "\"";
 			addOFlags << "\"-l" + dep + "\"";
 		}
-		localOptions.insert(O_FLAGS, localOptions.value(O_FLAGS) + " " + addOFlags.join(" "));
+		localOptions.insert(O_FLAGS, localOptions.value(O_FLAGS).toString() + " " + addOFlags.join(" "));
 		localOptions.expand();
 	}
 
-	QString rawFlags = localOptions[O_FLAGS].trimmed();
+	QString rawFlags = localOptions[O_FLAGS].toString().trimmed();
 	QStringList flags = OptionParser::arguments(rawFlags);
 
 	const QString ext = Platform::libExtension();
-	const QString name = localOptions.contains(LIBRARY_NAME) ?
-		localOptions[LIBRARY_NAME] :
+	const QString name = localOptions.contains(KEY_LIB_NAME) ?
+		localOptions[KEY_LIB_NAME].toString() :
 		(input.size() == 1 ? QFileInfo(input[0]).baseName() : "library");
-	const QString output = (localOptions.contains(OUTPUT_DIR) ? localOptions[OUTPUT_DIR] : QFileInfo(input[0]).absolutePath())
+	const QString output = (localOptions.contains(OUTPUT_DIR) ? localOptions[OUTPUT_DIR].toString() : QFileInfo(input[0]).absolutePath())
 		+ "/" + name + (ext.isEmpty() ? "" : "." + ext);
 
 	QStringList args;
@@ -152,9 +149,9 @@ Output O::produceLibrary(const QStringList &input, Options &options) const
 
 	// Fix rpath
 #ifdef Q_OS_MAC
-	if(localOptions.contains(LIBRARY_NAME)) {
+	if(localOptions.contains(KEY_LIB_NAME)) {
 		QProcess installNames;
-		QStringList args = QStringList() << "-id" << "lib" + localOptions[LIBRARY_NAME] + ".dylib" << output;
+		QStringList args = QStringList() << "-id" << "lib" + localOptions[KEY_LIB_NAME].toString() + ".dylib" << output;
 		qDebug() << "install_name_tool" << args;
 		installNames.start("install_name_tool", args);
 		if(!installNames.waitForStarted()) {
@@ -205,8 +202,8 @@ Output O::produceLibrary(const QStringList &input, Options &options) const
 
 OutputList O::transform(const QStringList &input, Options &options) const
 {
-	Options::const_iterator it = options.find(TERMINAL_TYPE);
-	if(it != options.end() && it.value() == LIBRARY) {
+	Options::const_iterator it = options.find(KEY_COMPILE_LIB);
+	if(it != options.end() && it.value().toBool()) {
 		return OutputList() << produceLibrary(input, options);
 	}
 

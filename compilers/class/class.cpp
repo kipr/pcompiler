@@ -20,7 +20,7 @@ OutputList Class::transform(const QStringList &input, Options &options) const
 	ret.setFiles(input);
 	
 	QProcess compiler;
-	QString output = (options.contains(OUTPUT_DIR) ? options[OUTPUT_DIR] : QFileInfo(input[0]).absolutePath() + "/a.jar");
+	QString output = (options.contains(OUTPUT_DIR) ? options[OUTPUT_DIR].toString() : QFileInfo(input[0]).absolutePath() + "/a.jar");
 	
 	compiler.start(jarPath(), (QStringList() << "cvf" << output) + input);
 	if(!compiler.waitForStarted()) {
