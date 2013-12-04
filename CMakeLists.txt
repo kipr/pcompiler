@@ -22,9 +22,8 @@ qt5_wrap_cpp(SOURCES ${MOC_SOURCES})
 add_definitions(-Wall)
 
 if(APPLE)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -arch x86_64 -g")
-	link_directories(/Library/Frameworks/)
-endif()
+  link_directories(/Library/Frameworks/)
+endif(APPLE)
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/lib)
 add_library(pcompiler SHARED ${SOURCES} ${INCLUDES})
