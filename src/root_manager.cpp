@@ -18,6 +18,7 @@ Compiler::OutputList RootManager::install(const Compiler::OutputList &output, co
 	const QDir binDir(bin().filePath(project));
 	const QDir libDir(lib().filePath(project));
 	const QDir includeDir(include().filePath(project));
+  const QDir boardDir = board();
 
 	if(!binDir.exists() && !binDir.mkpath(".")) {
 		return OutputList() << Output(m_root, 1, QByteArray(), "error: unable to create project bin dir");
@@ -29,6 +30,10 @@ Compiler::OutputList RootManager::install(const Compiler::OutputList &output, co
 	
 	if(!includeDir.exists() && !includeDir.mkpath(".")) {
 		return OutputList() << Output(m_root, 1, QByteArray(), "error: unable to create project include dir");
+	}
+  
+	if(!boardDir.exists() && !boardDir.mkpath(".")) {
+		return OutputList() << Output(m_root, 1, QByteArray(), "error: unable to create project board dir");
 	}
 
 	foreach(const Output &term, output) {
@@ -52,6 +57,9 @@ Compiler::OutputList RootManager::install(const Compiler::OutputList &output, co
 				case Output::HeaderTerminal:
 					dest = includeDir.filePath(fileInfo.fileName());
 					break;
+        case Output::BoardTerminal:
+          dest = board().filePath(fileInfo.fileName());
+          break;
 				default:
 					qDebug() << "Warning: unhandled terminal type";
 					break;
@@ -139,6 +147,11 @@ QDir RootManager::include(const QString &name) const
 	return QDir(includePath(name));
 }
 
+QDir RootManager::board(const QString &name) const
+{
+  return QDir(boardPath(name));
+}
+
 QString RootManager::binPath(const QString &name) const
 {
 	QDir d(m_root);
@@ -158,4 +171,11 @@ QString RootManager::includePath(const QString &name) const
 	QDir d(m_root);
 	d.makeAbsolute();
 	return d.filePath("include" + (name.isEmpty() ? QString() : ("/" + name)));
+}
+
+QString RootManager::boardPath(const QString &name) const
+{
+	QDir d(m_root);
+	d.makeAbsolute();
+	return d.filePath("board" + (name.isEmpty() ? QString() : ("/" + name)));
 }

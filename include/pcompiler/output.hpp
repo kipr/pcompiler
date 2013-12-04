@@ -24,7 +24,8 @@ namespace Compiler
 			BinaryTerminal,
 			DependencyTerminal,
 			LibraryTerminal,
-			HeaderTerminal
+			HeaderTerminal,
+      BoardTerminal
 		};
 		
 		void setFile(const QString& file);
