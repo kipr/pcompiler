@@ -23,7 +23,7 @@ OutputList Java::transform(const QStringList &input, Options &options) const
 	
 	QProcess compiler;
 	
-	QString rawFlags = options[JAVAC_FLAGS].trimmed();
+	QString rawFlags = options[JAVAC_FLAGS].toString().trimmed();
 	QStringList flags = OptionParser::arguments(rawFlags);
 	compiler.start(javacPath(), flags + input);
 	if(!compiler.waitForStarted()) {

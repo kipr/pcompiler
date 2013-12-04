@@ -3,16 +3,21 @@
 
 #include <QMap>
 #include <QString>
+#include <QVariant>
 
 #include "compat.hpp"
 
+#define KEY_DEPS "DEPENDENCIES"
+#define KEY_COMPILE_LIB "COMPILE_LIB"
+#define KEY_LIB_NAME "LIBRARY_NAME"
+
 namespace Compiler
 {
-	class DLL_EXPORT Options : public QMap<QString, QString>
+	class DLL_EXPORT Options : public QMap<QString, QVariant>
 	{
 	public:
-		static Options load(const QString& path);
-		bool save(const QString& path) const;
+		static Options load(const QString &path);
+		bool save(const QString &path) const;
 
 		void setVariable(const QString &str, const QString &value);
 		void removeVariable(const QString &str);

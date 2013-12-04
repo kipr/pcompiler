@@ -5,17 +5,17 @@
 
 using namespace Compiler;
 
-Options Options::load(const QString& path)
+Options Options::load(const QString &path)
 {
 	Options ret;
 	QSettings settings(path, QSettings::IniFormat);
-	foreach(const QString& key, settings.childKeys()) {
-		ret.insert(key, settings.value(key).toString());
+	foreach(const QString &key, settings.childKeys()) {
+		ret.insert(key, settings.value(key));
 	}
 	
 	settings.beginGroup(
 #ifdef Q_OS_MAC
-	"osx"
+	"osx" 
 #elif defined(Q_OS_WIN)
 	"win"
 #else
@@ -23,20 +23,23 @@ Options Options::load(const QString& path)
 #endif
 	);
 
-	foreach(const QString& key, settings.childKeys()) {
-		const QString previous = ret.take(key);
-		ret.insert(key, previous + " " + settings.value(key).toString());
+	foreach(const QString &key, settings.childKeys()) {
+		if(settings.value(key).type() == QVariant::String) {
+			const QString previous = ret.take(key).toString();
+			ret.insert(key, previous + " " + settings.value(key).toString());
+		}
+		else ret.insert(key, settings.value(key));
 	}
 	
 	settings.endGroup();
 	return ret;
 }
 
-bool Options::save(const QString& path) const
+bool Options::save(const QString &path) const
 {
 	QSettings settings(path, QSettings::IniFormat);
 	settings.clear();
-	foreach(const QString& key, keys()) {
+	foreach(const QString &key, keys()) {
 		settings.setValue(key, value(key));
 	}
 	settings.sync();
@@ -74,10 +77,11 @@ void Options::expand()
 	}
 }
 
-void Options::replace(const QString& str, const QString& value)
+void Options::replace(const QString &str, const QString &value)
 {
-	foreach(const QString& key, keys()) {
-		const QString replacement = take(key).replace(str, value);
+	foreach(const QString &key, keys()) {
+		if(this->value(key).type() != QVariant::String) continue;
+		const QString replacement = take(key).toString().replace(str, value);
 		insert(key, replacement);
 	}
 }
