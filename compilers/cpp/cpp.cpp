@@ -1,16 +1,13 @@
 #include "cpp.hpp"
 #include "pcompiler/compilers.hpp"
 #include "../common/platform.hpp"
-#include "../common/options.hpp"
+#include "pcompiler/compiler_options.hpp"
 
 #include <QFileInfo>
 #include <QProcess>
 #include <QDebug>
 
 using namespace Compiler;
-
-#define CPP_FLAGS "CPP_FLAGS"
-#define PLATFORM_CPP_FLAGS Platform::platform() + "_" + CPP_FLAGS
 
 Hpp::Hpp()
 	: Passthrough("h++", QStringList() << "hpp" << "hxx" << "hh")

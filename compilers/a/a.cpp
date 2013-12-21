@@ -1,7 +1,7 @@
 #include "a.hpp"
 #include "pcompiler/compilers.hpp"
 #include "../common/platform.hpp"
-#include "../common/options.hpp"
+#include "pcompiler/compiler_options.hpp"
 
 #include <QProcess>
 #include <QDebug>

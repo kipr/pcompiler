@@ -1,16 +1,13 @@
 #include "c.hpp"
 #include "pcompiler/compilers.hpp"
 #include "../common/platform.hpp"
-#include "../common/options.hpp"
+#include "pcompiler/compiler_options.hpp"
 
 #include <QFileInfo>
 #include <QProcess>
 #include <QDebug>
 
 using namespace Compiler;
-
-#define C_FLAGS "C_FLAGS"
-#define PLATFORM_C_FLAGS Platform::platform() + "_" + C_FLAGS
 
 H::H()
 	: Passthrough("h", QStringList() << "h")
@@ -60,6 +57,7 @@ Output C::transform(const QString &file, Options &options) const
 
 	QString rawFlags = options[C_FLAGS].toString().trimmed();
 	QStringList flags = OptionParser::arguments(rawFlags);
+	qDebug () << "CALLING C COMPILER WITH FLAGS:" << flags << "-c" << file << "-o" << output;
 	compiler.start(Platform::ccPath(), flags <<
 #ifndef _WIN32
 		"-fPIC" <<

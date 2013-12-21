@@ -1,6 +1,6 @@
 #include "ops.hpp"
 #include "pcompiler/compilers.hpp"
-
+#include "pcompiler/compiler_options.hpp"
 using namespace Compiler;
 
 Ops::Ops()
@@ -15,7 +15,10 @@ OutputList Ops::transform(const QStringList &input, Options &options) const
 
 		QMap<QString, QVariant>::const_iterator it = projOptions.constBegin();
 		for(; it != projOptions.constEnd(); ++it) {
-		    options.insert(it.key(), (options.value(it.key()).toString() + " " + it.value().toString()).trimmed());
+			if(it.key() == KEY_DEPS)
+				options.insert(KEY_DEPS, it.value().toStringList() + options.value(KEY_DEPS).toStringList());
+		    else
+				options.insert(it.key(), (options.value(it.key()).toString() + " " + it.value().toString()).trimmed());
 		}
 	}
 	options.expand();

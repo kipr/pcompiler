@@ -1,15 +1,13 @@
 #include "py.hpp"
 #include "pcompiler/compilers.hpp"
 #include "../common/platform.hpp"
-#include "../common/options.hpp"
+#include "pcompiler/compiler_options.hpp"
 
 #include <QFileInfo>
 #include <QProcess>
 #include <QDebug>
 
 using namespace Compiler;
-
-#define PY_FLAGS "PY_FLAGS"
 
 Python::Python()
 	: Base("python", QStringList() << "py", 1, QStringList() << PY_FLAGS << OUTPUT_DIR)

@@ -1,7 +1,7 @@
 #include "o.hpp"
 #include "pcompiler/compilers.hpp"
 #include "../common/platform.hpp"
-#include "../common/options.hpp"
+#include "pcompiler/compiler_options.hpp"
 
 #include <QFileInfo>
 #include <QDir>
@@ -9,9 +9,6 @@
 #include <QDebug>
 
 using namespace Compiler;
-
-#define O_FLAGS "LD_FLAGS"
-#define PLATFORM_O_FLAGS Platform::platform() + "_" + O_FLAGS
 
 O::O()
 	: Base("ld (c++)", QStringList() << "o", 1, QStringList()
@@ -35,7 +32,7 @@ Output O::produceBinary(const QStringList &input, Options &options) const
 	Options::const_iterator depsIt = localOptions.find(KEY_DEPS);
 	if(depsIt != localOptions.end()) {
 		QStringList addOFlags;
-		foreach(const QString &dep, OptionParser::arguments(depsIt.value().toString())) {
+		foreach(const QString &dep, depsIt.value().toStringList()) {
 			const QString &depName = QFileInfo(dep).completeBaseName();
 			addOFlags << "\"-L${USER_ROOT}/lib/" + depName + "\"";
 			addOFlags << "\"-l" + depName + "\"";

@@ -7,10 +7,6 @@
 
 #include "compat.hpp"
 
-#define KEY_DEPS "DEPENDENCIES"
-#define KEY_COMPILE_LIB "COMPILE_LIB"
-#define KEY_LIB_NAME "LIBRARY_NAME"
-
 namespace Compiler
 {
 	class DLL_EXPORT Options : public QMap<QString, QVariant>

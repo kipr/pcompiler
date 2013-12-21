@@ -1,15 +1,13 @@
 #include "java.hpp"
 #include "pcompiler/compilers.hpp"
 #include "../common/platform.hpp"
-#include "../common/options.hpp"
+#include "pcompiler/compiler_options.hpp"
 
 #include <QFileInfo>
 #include <QProcess>
 #include <QDebug>
 
 using namespace Compiler;
-
-#define JAVAC_FLAGS "JAVAC_FLAGS"
 
 Java::Java()
 	: Base("java", QStringList() << "java", 0, QStringList() << JAVAC_FLAGS << TEMPORARY_DIR)

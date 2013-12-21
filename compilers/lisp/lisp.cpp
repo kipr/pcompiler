@@ -1,15 +1,13 @@
 #include "lisp.hpp"
 #include "pcompiler/compilers.hpp"
 #include "../common/platform.hpp"
-#include "../common/options.hpp"
+#include "pcompiler/compiler_options.hpp"
 
 #include <QFileInfo>
 #include <QProcess>
 #include <QDebug>
 
 using namespace Compiler;
-
-#define LISP_FLAGS "LISP_FLAGS"
 
 Lisp::Lisp()
 	: Base("lisp", QStringList() << "lisp", 1, QStringList() << LISP_FLAGS << OUTPUT_DIR)
