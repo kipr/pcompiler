@@ -2,6 +2,7 @@
 
 #include <QDir>
 #include <QDebug>
+#include "../compilers/common/platform.hpp"
 
 using namespace Compiler;
 
@@ -48,7 +49,7 @@ Compiler::OutputList RootManager::install(const Compiler::OutputList &output, co
 						? project : project + "." + fileInfo.suffix());
 					break;
 				case Output::DependencyTerminal:
-					dest = libDir.filePath("lib" + (fileInfo.suffix().isEmpty()
+					dest = libDir.filePath((fileInfo.suffix().isEmpty()
 						? project : project + "." + fileInfo.suffix()));
 					break;
 				case Output::LibraryTerminal:

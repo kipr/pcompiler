@@ -12,6 +12,7 @@ namespace Compiler
 		static QString ccPath();
 		static QString cppPath();
 		static QString arPath();
+		static QString libPrefix();
 		static QString libExtension();
 		static QString exeExtension();
 	};

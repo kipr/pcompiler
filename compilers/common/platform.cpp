@@ -44,6 +44,15 @@ QString Platform::cppPath()
 #endif
 }
 
+QString Platform::libPrefix()
+{
+#ifdef Q_OS_WIN
+	return "";
+#else
+	return "lib";
+#endif
+}
+
 QString Platform::libExtension()
 {
 #ifdef Q_OS_WIN

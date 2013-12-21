@@ -128,12 +128,13 @@ Output O::produceLibrary(const QStringList &input, Options &options) const
 	QString rawFlags = localOptions[O_FLAGS].toString().trimmed();
 	QStringList flags = OptionParser::arguments(rawFlags);
 
+	const QString prefix = Platform::libPrefix();
 	const QString ext = Platform::libExtension();
 	const QString name = localOptions.contains(KEY_LIB_NAME) ?
 		localOptions[KEY_LIB_NAME].toString() :
 		(input.size() == 1 ? QFileInfo(input[0]).baseName() : "library");
 	const QString output = (localOptions.contains(OUTPUT_DIR) ? localOptions[OUTPUT_DIR].toString() : QFileInfo(input[0]).absolutePath())
-		+ "/" + name + (ext.isEmpty() ? "" : "." + ext);
+		+ "/" + prefix + name + (ext.isEmpty() ? "" : "." + ext);
 
 	QStringList args;
 	args << "-shared" << "-o" << output << input << flags;
