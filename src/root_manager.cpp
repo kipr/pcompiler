@@ -15,27 +15,9 @@ RootManager::RootManager(const QString &root)
 Compiler::OutputList RootManager::install(const Compiler::OutputList &output, const QString &project) const
 {
 	using namespace Compiler;
-	
-	const QDir binDir(bin(project));
-	const QDir libDir(lib(project));
-	const QDir includeDir(include(project));
-  const QDir boardDir(board());
-
-	if(!binDir.exists() && !binDir.mkpath(".")) {
-		return OutputList() << Output(m_root, 1, QByteArray(), "error: unable to create project bin dir");
-	}
-	
-	if(!libDir.exists() && !libDir.mkpath(".")) {
-		return OutputList() << Output(m_root, 1, QByteArray(), "error: unable to create project lib dir");
-	}
-	
-	if(!includeDir.exists() && !includeDir.mkpath(".")) {
-		return OutputList() << Output(m_root, 1, QByteArray(), "error: unable to create project include dir");
-	}
   
-	if(!boardDir.exists() && !boardDir.mkpath(".")) {
-		return OutputList() << Output(m_root, 1, QByteArray(), "error: unable to create project board dir");
-	}
+  if(!ensureSetup(project)) return OutputList() << Output(m_root, 1, QByteArray(),
+    "error: unable to create root directories");
 
 	foreach(const Output &term, output) {
 		if(!term.isTerminal() || !term.isSuccess()) continue;
@@ -45,18 +27,18 @@ Compiler::OutputList RootManager::install(const Compiler::OutputList &output, co
 			switch(term.terminal()) {
 				case Output::NotTerminal: break;
 				case Output::BinaryTerminal:
-					dest = binDir.filePath(fileInfo.suffix().isEmpty()
+					dest = bin(project).filePath(fileInfo.suffix().isEmpty()
 						? project : project + "." + fileInfo.suffix());
 					break;
 				case Output::DependencyTerminal:
-					dest = libDir.filePath((fileInfo.suffix().isEmpty()
+					dest = lib(project).filePath((fileInfo.suffix().isEmpty()
 						? project : project + "." + fileInfo.suffix()));
 					break;
 				case Output::LibraryTerminal:
-					dest = libDir.filePath(fileInfo.fileName());
+					dest = lib(project).filePath(fileInfo.fileName());
 					break;
 				case Output::HeaderTerminal:
-					dest = includeDir.filePath(fileInfo.fileName());
+					dest = include(project).filePath(fileInfo.fileName());
 					break;
         case Output::BoardTerminal:
           dest = board().filePath(fileInfo.fileName());
@@ -87,9 +69,10 @@ bool RootManager::uninstall(const QString &project) const
 {
 	bool success = true;
 	
-	success &= removeDir(bin().filePath(project).absolutePath());
-	success &= removeDir(lib().filePath(project).absolutePath());
-	success &= removeDir(include().filePath(project).absolutePath());
+  success &= archives().remove(project);
+	success &= removeDir(binPath(project));
+	success &= removeDir(libPath(project));
+	success &= removeDir(includePath(project));
 
 	return success;
 }
@@ -98,6 +81,24 @@ bool RootManager::clean() const
 {
 	QDir rootDir(m_root);
 	return removeDir(binPath()) && removeDir(libPath()) && removeDir(includePath());
+}
+
+bool RootManager::ensureSetup(const QString &project) const
+{
+  bool success = true;
+  const QDir archivesDir(archives());
+	const QDir binDir(bin(project));
+	const QDir libDir(lib(project));
+	const QDir includeDir(include(project));
+  const QDir boardDir(board());
+  
+  success &= archivesDir.exists() || archivesDir.mkpath(".");
+  success &= binDir.exists() || binDir.mkpath(".");
+  success &= libDir.exists() || libDir.mkpath(".");
+  success &= includeDir.exists() || includeDir.mkpath(".");
+  success &= boardDir.exists() || boardDir.mkpath(".");
+  
+  return success;
 }
 
 QStringList RootManager::libDirectories() const
@@ -130,6 +131,11 @@ bool RootManager::removeDir(const QString &path) const
 	return success;
 }
 
+QDir RootManager::archives(const QString &name) const
+{
+  return QDir(archivesPath(name));
+}
+
 QDir RootManager::bin(const QString &name) const
 {
 	return QDir(binPath(name));
@@ -150,30 +156,37 @@ QDir RootManager::board(const QString &name) const
   return QDir(boardPath(name));
 }
 
+QString RootManager::archivesPath(const QString &name) const
+{
+  QDir d(m_root);
+  d.makeAbsolute();
+  return d.filePath("archives/" + (name.isEmpty() ? QString() : name));
+}
+
 QString RootManager::binPath(const QString &name) const
 {  
   QDir d(m_root);
-  d.cd("bin");
-  return name.isEmpty() ? d.absolutePath() : d.absoluteFilePath(name);
+  d.makeAbsolute();
+  return d.filePath("bin/" + (name.isEmpty() ? QString() : name));
 }
 
 QString RootManager::libPath(const QString &name) const
 {
   QDir d(m_root);
-  d.cd("lib");
-  return name.isEmpty() ? d.absolutePath() : d.absoluteFilePath(name);
+  d.makeAbsolute();
+  return d.filePath("lib/" + (name.isEmpty() ? QString() : name));
 }
 
 QString RootManager::includePath(const QString &name) const
 {
   QDir d(m_root);
-  d.cd("include");
-  return name.isEmpty() ? d.absolutePath() : d.absoluteFilePath(name);
+  d.makeAbsolute();
+  return d.filePath("include/" + (name.isEmpty() ? QString() : name));
 }
 
 QString RootManager::boardPath(const QString &name) const
 {
   QDir d(m_root);
-  d.cd("board");
-  return name.isEmpty() ? d.absolutePath() : d.absoluteFilePath(name);
+  d.makeAbsolute();
+  return d.filePath("board/" + (name.isEmpty() ? QString() : name));
 }
