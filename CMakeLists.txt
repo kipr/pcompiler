@@ -36,7 +36,8 @@ set(OSX_INSTALL_NAMES_SCRIPT "${pcompiler_SOURCE_DIR}/scripts/osx_install_names.
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -headerpad_max_install_names")
 add_custom_target(osx_install_names ALL 
 	COMMAND sh ${OSX_INSTALL_NAMES_SCRIPT} ${LIBRARY_OUTPUT_PATH}/libpcompiler.dylib
-		QtCore.framework/Versions/5/QtCore
+		${_qt5Core_install_prefix}/lib
+    QtCore.framework/Versions/5/QtCore
 	WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}
 	DEPENDS pcompiler)
 endif()
