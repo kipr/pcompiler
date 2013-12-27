@@ -117,9 +117,10 @@ Output O::produceLibrary(const QStringList &input, Options &options) const
 	Options::const_iterator depsIt = localOptions.find(KEY_DEPS);
 	if(depsIt != localOptions.end()) {
 		QStringList addOFlags;
-		foreach(const QString &dep, OptionParser::arguments(depsIt.value().toString())) {
-			addOFlags << "\"-L${USER_ROOT}/lib/" + dep + "\"";
-			addOFlags << "\"-l" + dep + "\"";
+		foreach(const QString &dep, depsIt.value().toStringList()) {
+      const QString &depName = QFileInfo(dep).completeBaseName();
+			addOFlags << "\"-L${USER_ROOT}/lib/" + depName + "\"";
+			addOFlags << "\"-l" + depName + "\"";
 		}
 		localOptions.insert(O_FLAGS, localOptions.value(O_FLAGS).toString() + " " + addOFlags.join(" "));
 		localOptions.expand();
