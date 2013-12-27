@@ -31,7 +31,7 @@ Compiler::OutputList RootManager::install(const Compiler::OutputList &output, co
 						? project : project + "." + fileInfo.suffix());
 					break;
 				case Output::DependencyTerminal:
-					dest = lib(project).filePath((fileInfo.suffix().isEmpty()
+					dest = lib(project).filePath(Platform::libPrefix() + (fileInfo.suffix().isEmpty()
 						? project : project + "." + fileInfo.suffix()));
 					break;
 				case Output::LibraryTerminal:
