@@ -70,27 +70,31 @@ bool RootManager::uninstall(const QString &project) const
 	bool success = true;
 	
   success &= archives().remove(project);
-	success &= removeDir(binPath(project));
-	success &= removeDir(libPath(project));
-	success &= removeDir(includePath(project));
+	success &= bin(project).removeRecursively();
+	success &= lib(project).removeRecursively();
+	success &= include(project).removeRecursively();
 
 	return success;
 }
 
 bool RootManager::clean() const
 {
-	QDir rootDir(m_root);
-	return removeDir(binPath()) && removeDir(libPath()) && removeDir(includePath());
+	return archives().removeRecursively() && bin().removeRecursively() && lib().removeRecursively()
+    && include().removeRecursively() && board().removeRecursively();
 }
 
 bool RootManager::ensureSetup(const QString &project) const
 {
   bool success = true;
-  const QDir archivesDir(archives());
-	const QDir binDir(bin(project));
-	const QDir libDir(lib(project));
-	const QDir includeDir(include(project));
-  const QDir boardDir(board());
+  QDir archivesDir(archives());
+  QDir binDir(bin(project));
+  QDir libDir(lib(project));
+  QDir includeDir(include(project));
+  QDir boardDir(board());
+  
+  if(binDir.exists()) success &= binDir.removeRecursively();
+  if(libDir.exists()) success &= libDir.removeRecursively();
+  if(includeDir.exists()) success &= includeDir.removeRecursively();
   
   success &= archivesDir.exists() || archivesDir.mkpath(".");
   success &= binDir.exists() || binDir.mkpath(".");
@@ -113,22 +117,6 @@ QStringList RootManager::libDirectoryPaths() const
 	foreach(const QFileInfo &info, infos) paths << info.absoluteFilePath();
 
 	return paths;
-}
-
-bool RootManager::removeDir(const QString &path) const
-{
-	bool success = true;
-	QDir directory(path);
-
-	QFileInfoList files = directory.entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
-	foreach(const QFileInfo &file, files) success &= directory.remove(file.fileName());
-
-	QFileInfoList dirs = directory.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
-	foreach(const QFileInfo &dir, dirs) success &= removeDir(dir.absoluteFilePath());
-
-	success &= directory.rmdir(directory.absolutePath());
-
-	return success;
 }
 
 QDir RootManager::archives(const QString &name) const
