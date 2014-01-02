@@ -41,7 +41,7 @@ Compiler::OutputList RootManager::install(const Compiler::OutputList &output, co
 					dest = include(project).filePath(fileInfo.fileName());
 					break;
         case Output::BoardTerminal:
-          dest = board().filePath(fileInfo.fileName());
+          dest = board(project).filePath(fileInfo.fileName());
           break;
 				default:
 					qDebug() << "Warning: unhandled terminal type";
@@ -73,6 +73,7 @@ bool RootManager::uninstall(const QString &project) const
 	success &= bin(project).removeRecursively();
 	success &= lib(project).removeRecursively();
 	success &= include(project).removeRecursively();
+  success &= board(project).removeRecursively();
 
 	return success;
 }
@@ -90,11 +91,14 @@ bool RootManager::ensureSetup(const QString &project) const
   QDir binDir(bin(project));
   QDir libDir(lib(project));
   QDir includeDir(include(project));
-  QDir boardDir(board());
+  QDir boardDir(board(project));
   
-  if(binDir.exists()) success &= binDir.removeRecursively();
-  if(libDir.exists()) success &= libDir.removeRecursively();
-  if(includeDir.exists()) success &= includeDir.removeRecursively();
+  if(!project.isEmpty()) {
+    if(binDir.exists()) success &= binDir.removeRecursively();
+    if(libDir.exists()) success &= libDir.removeRecursively();
+    if(includeDir.exists()) success &= includeDir.removeRecursively();
+    if(boardDir.exists()) success &= boardDir.removeRecursively();
+  }
   
   success &= archivesDir.exists() || archivesDir.mkpath(".");
   success &= binDir.exists() || binDir.mkpath(".");
