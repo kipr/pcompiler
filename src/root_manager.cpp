@@ -16,8 +16,10 @@ Compiler::OutputList RootManager::install(const Compiler::OutputList &output, co
 {
 	using namespace Compiler;
   
+  // TODO: move the already running logic into ServerThread
   if(!ensureSetup(project)) return OutputList() << Output(m_root, 1, QByteArray(),
-    "error: unable to create root directories");
+    "error: Unable to create root directories. Make sure that the target isn't already running a"
+      "program, and that you have privileges to the working directory.");
 
 	foreach(const Output &term, output) {
 		if(!term.isTerminal() || !term.isSuccess()) continue;
