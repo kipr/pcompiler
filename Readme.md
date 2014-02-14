@@ -4,17 +4,18 @@ pcompiler (Precedence Compiler)
 pcompiler is an automatic source code compiler.
 Given a set of input files, pcompiler will attempt to create an executable out of them.
 
-pcompiler is not robust enough to compile large or complex projects, but is extremely simple
-to use.
+pcompiler is not robust enough to compile large or complex projects, but is extremely simple to use.
 
 Requirements
 ============
 
-* Qt 4.7 or higher
+* Qt 5.0 or higher
+* CMake 2.8.12
 
-Building
-========
+Building (OS X and Linux)
+=========================
 
+	cd pcompiler
 	mkdir build
 	cd build
 	cmake ..
@@ -25,6 +26,7 @@ Authors
 =======
 
 * Braden McDorman
+* Nafis Zaman
 
 License
 =======
