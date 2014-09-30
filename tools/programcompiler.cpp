@@ -11,7 +11,6 @@
 #include <QDebug>
 #include <QDir>
 #include <QDateTime>
-#include <QTextCodec>
 
 #include <iostream>
 #include <cstdio>
@@ -208,8 +207,7 @@ int main(int argc, char *argv[])
         
         if(output.output().size() > 0)
         {
-            QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-            cout << endl << '\t' << toStdString(codec->toUnicode(output.output()).remove(tmpDir + "/").replace('\n', "\n\t")) << endl;
+            cout << endl << '\t' << toStdString(QString::fromUtf8(output.output()).remove(tmpDir + "/").replace('\n', "\n\t")) << endl;
         }
         
         if(output.isSuccess())
@@ -218,8 +216,7 @@ int main(int argc, char *argv[])
         }
         else
         {
-            QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-            cout << endl << '\t' << toStdString(codec->toUnicode(output.error()).remove(tmpDir + "/").replace('\n', "\n\t")) << endl;
+            cout << endl << '\t' << toStdString(QString::fromUtf8(output.error()).remove(tmpDir + "/").replace('\n', "\n\t")) << endl;
             
             cout << "failed with exit code " << output.exitCode() << endl;
         }
