@@ -1,8 +1,8 @@
 project(programcompiler)
 
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 2.8.0)
 
-find_package(Qt5Core REQUIRED)
+find_package(Qt4 REQUIRED)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
