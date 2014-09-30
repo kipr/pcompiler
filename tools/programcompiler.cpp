@@ -8,10 +8,10 @@
 #include <kar/kar.hpp>
 
 #include <QCoreApplication>
-#include <QCommandLineParser>
 #include <QDebug>
 #include <QDir>
 #include <QDateTime>
+#include <QTextCodec>
 
 #include <iostream>
 #include <cstdio>
@@ -19,90 +19,127 @@
 
 using namespace std;
 
-void messageOutputAll(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+void messageOutputAll(QtMsgType type, const char* msg)
 {
-    QByteArray localMsg = msg.toLocal8Bit();
     switch (type)
     {
     case QtDebugMsg:
-        cout << "Debug: " << localMsg.constData() << endl;
+        cout << "Debug: " << msg << endl;
         break;
     case QtWarningMsg:
-        cout << "Warning: " << localMsg.constData() << endl;
+        cout << "Warning: " << msg << endl;
         break;
     case QtCriticalMsg:
-        cerr << "Critical: " << localMsg.constData() << endl;
+        cerr << "Critical: " << msg << endl;
         break;
     case QtFatalMsg:
-        cerr << "Fatal: " << localMsg.constData() << endl;
+        cerr << "Fatal: " << msg << endl;
         abort();
     }
 }
 
-void messageOutputNoDebug(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+void messageOutputNoDebug(QtMsgType type, const char* msg)
 {
-    QByteArray localMsg = msg.toLocal8Bit();
     switch (type)
     {
     case QtDebugMsg:
     case QtWarningMsg:
         break;
     case QtCriticalMsg:
-        cerr << "Critical: " << localMsg.constData() << endl;
+        cerr << "Critical: " << msg << endl;
         break;
     case QtFatalMsg:
-        cerr << "Fatal: " << localMsg.constData() << endl;
+        cerr << "Fatal: " << msg << endl;
         abort();
     }
+}
+
+inline string toStdString(const QString& str)
+{
+    const QByteArray str_ba = str.toUtf8();
+    return string(str_ba.constData());
+}
+
+void usage(const QString& appName)
+{
+    cout << toStdString(QCoreApplication::translate("main",
+        "Usage: %1 [options] name\n"
+        "Compiles a KIPR Link program\n"
+        "Options:\n"
+        "  -h, --help      Displays this help.\n"
+        "  -v, --version   Displays version information.\n"
+        "  -r <directory>  Root directory <directory>.\n"
+        "  -d              Show debug output\n"
+        "\n"
+        "Arguments:\n"
+        "  name            The program's name.\n"
+       ).arg(appName)) << endl;
 }
 
 int main(int argc, char *argv[])
 {
+    const QString appVersion = "1.0";
+    
     QCoreApplication app(argc, argv);
     QCoreApplication::setApplicationName("KIPR Link Program Compiler");
-    QCoreApplication::setApplicationVersion("1.0");
+    QCoreApplication::setApplicationVersion(appVersion);
     
-    qInstallMessageHandler(messageOutputAll);
+    qInstallMsgHandler(messageOutputNoDebug);
     
     // get the command line arguments
-    QCommandLineParser parser;
-    parser.setApplicationDescription("Compiles a KIPR Link program");
-    parser.addHelpOption();
-    parser.addVersionOption();
-    parser.addPositionalArgument("name", QCoreApplication::translate("main", "The program's name."));
-    QCommandLineOption rootDirectoryOption("r",
-            QCoreApplication::translate("main", "Root directory <directory>."),
-            QCoreApplication::translate("main", "directory"));
-    parser.addOption(rootDirectoryOption);
-    QCommandLineOption debugOutputOption("d", QCoreApplication::translate("main", "Show debug output"));
-    parser.addOption(debugOutputOption);
-    
-    parser.process(app);
-    
-    const QStringList args = parser.positionalArguments(); // name is at args.at(0), sourcce at args.at(1)
+    const QStringList args = QCoreApplication::arguments();
+    const QString appName = (args.size() > 0) ? args.at(0) : "programcompiler";
     
     QString rootDir = "/kovan";
-    if(parser.isSet(rootDirectoryOption))
+    QString name = "";
+    
+    for(int i = 1; i < args.size(); i++)
     {
-        rootDir = parser.value(rootDirectoryOption);
+        if(args.at(i) == "-r")
+        {
+            if(++i >= args.size())
+            {
+                usage(appName);
+                return 1;
+            }
+            else
+            {
+                rootDir = args.at(i);
+            }
+        }
+        else if(args.at(i) == "-d")
+        {
+            qInstallMsgHandler(messageOutputAll);
+        }
+        else if(args.at(i) == "-h" || args.at(i) == "--help")
+        {
+            usage(appName);
+            return 0;
+        }
+        else if(args.at(i) == "-v" || args.at(i) == "--version")
+        {
+            cout << toStdString(appName) << ", version " << toStdString(appVersion) << endl;
+            return 0;
+        }
+        else
+        {
+            name = args.at(i);
+        }
     }
+    
     if(!QDir(rootDir).exists())
     {
-        cerr << QCoreApplication::translate("main", "Error: %1 does not name a directory").arg(rootDir).toStdString() << endl << endl;
-        parser.showHelp(1); // this will exit the application with exit code 1
+        cerr << toStdString(QCoreApplication::translate("main", "Error: %1 does not name a directory").arg(rootDir)) << endl << endl;
+        usage(appName);
+        return 1;
     }
     
-    if(!parser.isSet(debugOutputOption))
+    if(name == "")
     {
-       qInstallMessageHandler(messageOutputNoDebug);
+        cerr << toStdString(QCoreApplication::translate("main", "Error: Too few arguments provided")) << endl << endl;
+        usage(appName);
+        return 1;
     }
-    
-    if(args.size() != 1)
-    {
-        cerr << QCoreApplication::translate("main", "Error: Too few arguments provided").toStdString() << endl << endl;
-        parser.showHelp(1); // this will exit the application with exit code 1
-    }
-    const QString name = args.at(0);
     
     // unpack the archive
     Compiler::RootManager rootManager(rootDir);
@@ -113,14 +150,16 @@ int main(int argc, char *argv[])
     kiss::KarPtr archive = kiss::Kar::load(archivePath);
     if(!archive)
     {
-        cerr << QCoreApplication::translate("main", "Error: %1 is no KAR archive").arg(archivePath).toStdString() << endl << endl;
-        parser.showHelp(1); // this will exit the application with exit code 1
+        cerr << toStdString(QCoreApplication::translate("main", "Error: %1 is no KAR archive").arg(archivePath)) << endl << endl;
+        usage(appName);
+        return 1;
     }
     
     const QString tmpDir = QDir::tempPath() + "/" + QDateTime::currentDateTime().toString("yyMMddhhmmss") + ".botui";
     if(!archive->extract(tmpDir))
     {
-        cerr << QCoreApplication::translate("main", "Error: Could not extract the archive into %1").arg(tmpDir).toStdString() << endl << endl;
+        cerr << toStdString(QCoreApplication::translate("main", "Error: Could not extract the archive into %1").arg(tmpDir))
+             << endl << endl;
         return 1;
     }
     
@@ -152,7 +191,7 @@ int main(int argc, char *argv[])
             cout << "{ ";        
             foreach(const QString& file, output.files())
             {
-                cout << QString(file).remove(tmpDir + "/").toStdString() << " ";
+                cout << toStdString(QString(file).remove(tmpDir + "/")) << " ";
             }
             cout << "} ";
         }
@@ -162,14 +201,15 @@ int main(int argc, char *argv[])
             cout << "-> { ";
             foreach(const QString& file, output.generatedFiles())
             {
-                cout << QString(file).remove(tmpDir + "/").toStdString() << " ";
+                cout << toStdString(QString(file).remove(tmpDir + "/")) << " ";
             }
             cout << "} ";
         }
         
         if(output.output().size() > 0)
         {
-            cout << endl << '\t' << QString(output.output()).remove(tmpDir + "/").replace('\n', "\n\t").toStdString() << endl;
+            QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+            cout << endl << '\t' << toStdString(codec->toUnicode(output.output()).remove(tmpDir + "/").replace('\n', "\n\t")) << endl;
         }
         
         if(output.isSuccess())
@@ -178,7 +218,8 @@ int main(int argc, char *argv[])
         }
         else
         {
-            cout << endl << '\t' << QString(output.error()).remove(tmpDir + "/").replace('\n', "\n\t").toStdString() << endl;
+            QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+            cout << endl << '\t' << toStdString(codec->toUnicode(output.error()).remove(tmpDir + "/").replace('\n', "\n\t")) << endl;
             
             cout << "failed with exit code " << output.exitCode() << endl;
         }

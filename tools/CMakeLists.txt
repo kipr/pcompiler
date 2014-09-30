@@ -8,7 +8,6 @@ include_directories(${CMAKE_SOURCE_DIR})
 
 add_executable(programcompiler programcompiler.cpp)
 target_link_libraries(programcompiler kar pcompiler)
-qt5_use_modules(programcompiler Core)
 
 if(WIN32)
 install(TARGETS programcompiler RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/bin)
