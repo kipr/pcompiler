@@ -11,9 +11,12 @@ Requirements
 
 * Qt 5.0 or higher
 * CMake 2.8.12
+* libkar (only for the command line pcompiler tool)
 
-Building (OS X and Linux)
-=========================
+Building
+========
+
+## OS X and Linux
 
 	cd pcompiler
 	mkdir build
@@ -21,6 +24,17 @@ Building (OS X and Linux)
 	cmake ..
 	make
 	make install
+
+## Windows
+
+Prerequisite: The binaries/includes/libraries are installed into `<dir>\prefix`
+
+1. Clone this repository into `<dir>\pcompiler`.
+2. Configure it and generate the makefiles with cmake. Set the build directory to `<dir>\pcompiler\build`.
+3. Open `<dir>\pcompiler\build\pcompiler.sln` with Visual Studio
+4. Build the `INSTALL` project
+
+The binaries/includes/libraries are installed into `<dir>\prefix`
 
 Authors
 =======
