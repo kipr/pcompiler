@@ -42,14 +42,11 @@ add_custom_target(osx_install_names ALL
 	DEPENDS pcompiler)
 endif()
 
-if(WIN32)
-install(FILES ${INCLUDES} DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/include/pcompiler)
-install(TARGETS pcompiler
-	ARCHIVE DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib
-	RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}/../prefix/lib)
-else()
+if(WIN32 AND CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+set(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/../prefix)
+endif()
+
 install(FILES ${INCLUDES} DESTINATION include/pcompiler)
 install(TARGETS pcompiler LIBRARY DESTINATION lib)
-endif()
 
 add_subdirectory(tools)
