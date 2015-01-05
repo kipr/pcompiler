@@ -47,6 +47,6 @@ set(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/../prefix)
 endif()
 
 install(FILES ${INCLUDES} DESTINATION include/pcompiler)
-install(TARGETS pcompiler LIBRARY DESTINATION lib)
+install(TARGETS pcompiler DESTINATION lib)
 
 add_subdirectory(tools)
