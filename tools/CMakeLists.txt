@@ -1,4 +1,4 @@
-project(programcompiler)
+project(pco)
 
 cmake_minimum_required(VERSION 2.8.12)
 
@@ -9,8 +9,8 @@ include_directories(${CMAKE_INSTALL_PREFIX}/include)
 link_directories(${CMAKE_INSTALL_PREFIX}/lib)
 endif()
 
-add_executable(programcompiler programcompiler.cpp)
-target_link_libraries(programcompiler kar pcompiler)
-qt5_use_modules(programcompiler Core)
+add_executable(pco pco.cpp)
+target_link_libraries(pco kar pcompiler)
+qt5_use_modules(pco Core)
 
-install(TARGETS programcompiler RUNTIME DESTINATION bin)
+install(TARGETS pco RUNTIME DESTINATION bin)
