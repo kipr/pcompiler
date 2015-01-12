@@ -10,6 +10,7 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include <QDir>
+#include <QFile>
 #include <QDateTime>
 
 #include <iostream>
@@ -68,6 +69,7 @@ void usage(const QString& appName)
         "  -h, --help      Displays this help.\n"
         "  -v, --version   Displays version information.\n"
         "  -r <directory>  Root directory <directory>.\n"
+        "  -o <file>       Compilation options file <file>.\n"
         "  -d              Show debug output\n"
         "\n"
         "Arguments:\n"
@@ -90,6 +92,7 @@ int main(int argc, char *argv[])
     const QString appName = (args.size() > 0) ? args.at(0) : "programcompiler";
     
     QString rootDir = "/kovan";
+    QString optionsFile = "/etc/kovan/platform.hints";
     QString name = "";
     
     for(int i = 1; i < args.size(); i++)
@@ -104,6 +107,18 @@ int main(int argc, char *argv[])
             else
             {
                 rootDir = args.at(i);
+            }
+        }
+        if(args.at(i) == "-o")
+        {
+            if(++i >= args.size())
+            {
+                usage(appName);
+                return 1;
+            }
+            else
+            {
+                optionsFile = args.at(i);
             }
         }
         else if(args.at(i) == "-d")
@@ -129,6 +144,13 @@ int main(int argc, char *argv[])
     if(!QDir(rootDir).exists())
     {
         cerr << toStdString(QCoreApplication::translate("main", "Error: %1 does not name a directory").arg(rootDir)) << endl << endl;
+        usage(appName);
+        return 1;
+    }
+    
+    if(!QFile(optionsFile).exists())
+    {
+        cerr << toStdString(QCoreApplication::translate("main", "Error: %1 does not name a file").arg(optionsFile)) << endl << endl;
         usage(appName);
         return 1;
     }
@@ -170,7 +192,7 @@ int main(int argc, char *argv[])
     }
     
     Compiler::Input input = Compiler::Input::fromList(extracted);
-    Compiler::Options opts = Compiler::Options::load("/home/stefan/tmp/platform.hints");
+    Compiler::Options opts = Compiler::Options::load(optionsFile);
     
     // compile the files
     Compiler::Engine engine(Compiler::Compilers::instance()->compilers());
