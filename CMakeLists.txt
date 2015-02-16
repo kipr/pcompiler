@@ -4,6 +4,8 @@ cmake_minimum_required(VERSION 2.8.12)
 
 find_package(Qt5Core REQUIRED)
 
+include_directories(/usr/local/include)
+
 set(INCLUDE ${CMAKE_SOURCE_DIR}/include)
 set(SRC ${CMAKE_SOURCE_DIR}/src)
 set(COMPILER ${CMAKE_SOURCE_DIR}/compilers)
