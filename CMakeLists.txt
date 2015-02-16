@@ -54,3 +54,5 @@ else()
 install(FILES ${INCLUDES} DESTINATION include/pcompiler)
 install(TARGETS pcompiler LIBRARY DESTINATION lib)
 endif()
+
+add_subdirectory(tools)
