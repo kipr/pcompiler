@@ -33,6 +33,7 @@ OutputList Class::transform(const QStringList &input, Options &options) const
 	ret.setOutput(compiler.readAllStandardOutput());
 	ret.setError(compiler.readAllStandardError());
 	ret.setGeneratedFiles(QStringList() << output);
+  ret.setTerminal(Output::BinaryTerminal);
 	
 	return OutputList() << ret;
 }
