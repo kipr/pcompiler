@@ -67,7 +67,7 @@ OutputList Class::transform(const QStringList &input, Options &options) const
       "char buffer[4096];"
       "snprintf(buffer, sizeof buffer, \"java -jar \\\"%s%1\\\" %2\", argv[0]);"
       "return system(buffer);"
-      "}").arg(output).arg(selectedRunnee.baseName()).toUtf8());
+      "}").arg(QFileInfo(output).fileName()).arg(selectedRunnee.baseName()).toUtf8());
     runCode.close();
     runnee.setGeneratedFiles(QStringList() << outRPath);
     runnee.setExitCode(0);
