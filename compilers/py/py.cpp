@@ -46,7 +46,7 @@ OutputList Python::transform(const QStringList &input, Options &options) const
   if(runCode.open(QIODevice::WriteOnly))
   {
     runCode.write(QString("#include<stdio.h>\n"
-      "int main() {"
+      "int main(int argc, char *argv[]) {"
       "int i = strlen(argv[0]);"
       "for(; i > 0 && argv[0][i] != '/'; --i);"
       "argv[0][i + 1] = 0;"
