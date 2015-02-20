@@ -1,11 +1,11 @@
 #ifndef _PY_HPP_
 #define _PY_HPP_
 
-#include "pcompiler/base.hpp"
+#include "../passthrough/passthrough.hpp"
 
 namespace Compiler
 {
-	class Python : public Base
+	class Python : public Passthrough
 	{
 	public:
 		Python();

@@ -10,15 +10,16 @@
 using namespace Compiler;
 
 Python::Python()
-	: Base("python", QStringList() << "py", 1, QStringList() << PY_FLAGS << OUTPUT_DIR)
-{
-}
+	: Passthrough("py", QStringList() << "py")
+{}
 
 OutputList Python::transform(const QStringList &input, Options &options) const
 {
 	Output ret;
-	ret.setExitCode(1);
-	ret.setError("error: pcompiler doesn't know how to compile python files");
+	ret.setFiles(input);
+	ret.setExitCode(0);
+	ret.setGeneratedFiles(input);
+	ret.setTerminal(Output::BinaryTerminal);
 	return OutputList() << ret;
 }
 
