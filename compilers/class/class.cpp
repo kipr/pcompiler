@@ -11,7 +11,7 @@
 using namespace Compiler;
 
 Class::Class()
-	: Base("jar", QStringList() << "class", 1, QStringList() << OUTPUT_DIR)
+	: Base("jar", QStringList() << "class", 0, QStringList() << OUTPUT_DIR)
 {
 }
 

@@ -26,7 +26,7 @@ OutputList H::transform(const QStringList &input, Options &options) const
 REGISTER_COMPILER(H)
 
 C::C()
-	: Base("c", QStringList() << "c", 0, QStringList() << C_FLAGS << TEMPORARY_DIR)
+	: Base("c", QStringList() << "c", 1, QStringList() << C_FLAGS << TEMPORARY_DIR)
 {
 }
 

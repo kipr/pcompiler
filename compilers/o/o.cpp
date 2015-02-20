@@ -11,7 +11,7 @@
 using namespace Compiler;
 
 O::O()
-	: Base("ld (c++)", QStringList() << "o", 1, QStringList()
+	: Base("ld (c++)", QStringList() << "o", 2, QStringList()
 		<< O_FLAGS << OUTPUT_DIR << KEY_LIB_NAME)
 {
 }

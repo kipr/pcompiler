@@ -10,7 +10,7 @@
 using namespace Compiler;
 
 Java::Java()
-	: Base("java", QStringList() << "java", 0, QStringList() << JAVAC_FLAGS << TEMPORARY_DIR)
+	: Base("java", QStringList() << "java", -1, QStringList() << JAVAC_FLAGS << TEMPORARY_DIR)
 {
 }
 
