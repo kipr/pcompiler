@@ -6,6 +6,7 @@
 #include <QFileInfo>
 #include <QProcess>
 #include <QDebug>
+#include <QDir>
 
 using namespace Compiler;
 
