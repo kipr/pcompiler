@@ -54,9 +54,9 @@ OutputList Class::transform(const QStringList &input, Options &options) const
       "for(; i > 0 && argv[0][i] != '/'; --i);"
       "argv[0][i + 1] = 0;"
       "char buffer[4096];"
-      "snprintf(buffer, sizeof buffer, \"java -jar \\\"%s%1\\\" %2\", argv[0]);"
+      "snprintf(buffer, sizeof buffer, \"java %2\", argv[0]);"
       "return system(buffer);"
-      "}").arg(QFileInfo(output).fileName()).arg(selectedRunnee.baseName()).toUtf8());
+      "}").arg(selectedRunnee.baseName()).toUtf8());
     runCode.close();
     runnee.setGeneratedFiles(QStringList() << outRPath);
     runnee.setExitCode(0);
