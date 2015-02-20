@@ -28,7 +28,7 @@ Compiler::OutputList RootManager::install(const Compiler::OutputList &output, co
 				case Output::NotTerminal: break;
 				case Output::BinaryTerminal:
 					dest = bin(project).filePath(fileInfo.suffix().isEmpty()
-						? project : project + "." + fileInfo.suffix());
+						? project : fileInfo.fileName());
 					break;
 				case Output::DependencyTerminal:
 					dest = lib(project).filePath(Platform::libPrefix() + (fileInfo.suffix().isEmpty()
