@@ -25,7 +25,7 @@ OutputList Class::transform(const QStringList &input, Options &options) const
 	
 	compiler.start(jarPath(), (QStringList() << "cvf" << output) + input);
 	if(!compiler.waitForStarted()) {
-		ret = Output(Platform::ccPath(), 1, "", "error: couldn't start the java archiver");
+		ret = Output(jarPath(), 1, "", "error: couldn't start the java archiver");
 		return OutputList() << ret;
 	}
 	compiler.waitForFinished();
