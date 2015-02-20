@@ -56,6 +56,7 @@ OutputList Class::transform(const QStringList &input, Options &options) const
   const QString outRPath = selectedRunnee.absoluteDir().absoluteFilePath("runnee.c");
   QFile runCode(outRPath);
   
+  qDebug() << "Writing " << outRPath;
   if(runCode.open(QIODevice::WriteOnly))
   {
     runCode.write(QString("#include<stdio.h>\n"
