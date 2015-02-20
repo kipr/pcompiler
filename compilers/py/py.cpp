@@ -34,7 +34,7 @@ OutputList Python::transform(const QStringList &input, Options &options) const
     break;
   }
   
-  if(!foundMain)
+  if(!foundMain && input.size() > 1)
   {
     runnee.setOutput(QObject::tr("warning: Couldn't find main.py."
       " Assuming %1 contains entry point.").arg(selectedRunnee.fileName()).toUtf8());
@@ -45,7 +45,15 @@ OutputList Python::transform(const QStringList &input, Options &options) const
   
   if(runCode.open(QIODevice::WriteOnly))
   {
-    runCode.write(QString("int main() { return system(\"python %1\"); }").arg(selectedRunnee.absoluteFilePath()).toUtf8());
+    runCode.write(QString("#include<stdio.h>\n"
+      "int main() {"
+      "int i = strlen(argv[0]);"
+      "for(; i > 0 && argv[0][i] != '/'; --i);"
+      "argv[0][i + 1] = 0;"
+      "char buffer[4096];"
+      "snprintf(buffer, sizeof buffer, \"python \\\"%s%1\\\"\", argv[0]);"
+      "return system(buffer);"
+      "}").arg(selectedRunnee.fileName()).toUtf8());
     runCode.close();
     runnee.setGeneratedFiles(QStringList() << outRPath);
     runnee.setExitCode(0);
