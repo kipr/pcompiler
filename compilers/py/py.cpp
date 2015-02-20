@@ -5,6 +5,7 @@
 
 #include <QFileInfo>
 #include <QProcess>
+#include <QDir>
 #include <QDebug>
 
 using namespace Compiler;
@@ -20,7 +21,42 @@ OutputList Python::transform(const QStringList &input, Options &options) const
 	ret.setExitCode(0);
 	ret.setGeneratedFiles(input);
 	ret.setTerminal(Output::BinaryTerminal);
-	return OutputList() << ret;
+  
+  Output runnee;
+  bool foundMain = false;
+  QFileInfo selectedRunnee(input[0]);
+  Q_FOREACH(const QString &in, input)
+  {
+    QFileInfo fi(in);
+    if(fi.baseName().toLower() != "main") continue;
+    foundMain = true;
+    selectedRunnee = fi;
+    break;
+  }
+  
+  if(!foundMain)
+  {
+    runnee.setOutput(QObject::tr("warning: Couldn't find main.py."
+      " Assuming %1 contains entry point.").arg(selectedRunnee.fileName()).toUtf8());
+  }
+  
+  const QString outRPath = selectedRunnee.absoluteDir().absoluteFilePath("runnee.c");
+  QFile runCode(outRPath);
+  
+  if(runCode.open(QIODevice::WriteOnly))
+  {
+    runCode.write(QString("int main() { return system(\"python %1\"); }").arg(selectedRunnee.absoluteFilePath()).toUtf8());
+    runCode.close();
+    runnee.setGeneratedFiles(QStringList() << outRPath);
+    runnee.setExitCode(0);
+  }
+  else
+  {
+    runnee.setError(QObject::tr("error: Couldn't open %1 for writing").arg(outRPath).toUtf8());
+    runnee.setExitCode(1);
+  }
+  
+	return OutputList() << ret << runnee;
 }
 
 REGISTER_COMPILER(Python)
