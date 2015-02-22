@@ -1,11 +1,11 @@
 #ifndef _SH_HPP_
 #define _SH_HPP_
 
-#include "../passthrough/passthrough.hpp"
+#include "pcompiler/base.hpp"
 
 namespace Compiler
 {
-	class Shell : public Passthrough
+	class Shell : public Base
 	{
 	public:
 		Shell();
