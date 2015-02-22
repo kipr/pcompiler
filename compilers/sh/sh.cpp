@@ -11,7 +11,7 @@
 using namespace Compiler;
 
 Shell::Shell()
-  : Base("sh", QStringList() << "sh" << "bash", 0, QStringList())
+  : Base("sh", QStringList() << "sh" << "bash", 1, QStringList())
 {}
 
 OutputList Shell::transform(const QStringList &input, Options &options) const
