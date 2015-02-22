@@ -28,6 +28,13 @@ OutputList Shell::transform(const QStringList &input, Options &options) const
     QFile::rename(mod[0], newName);
     mod[0] = newName;
   }
+  Q_FOREACH(const QString &file, mod) {
+    QFile::setPermissions(file, QFile::ExeOwner
+      | QFile::ExeUser    | QFile::ReadOwner
+      | QFile::WriteOwner | QFile::ReadUser
+      | QFile::WriteUser  | QFile::ExeGroup
+      | QFile::ReadGroup  | QFile::WriteGroup);
+  }
   ret.setGeneratedFiles(mod);
   ret.setTerminal(Output::BinaryTerminal);
   return OutputList() << ret;
