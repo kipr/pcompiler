@@ -48,7 +48,7 @@ OutputList Class::transform(const QStringList &input, Options &options) const
   if(runCode.open(QIODevice::WriteOnly))
   {
     runCode.write(QString("#!/bin/bash\n"
-      "java %1").arg(selectedRunnee.baseName()).toUtf8());
+      "java -cp $(dirname $0) %1").arg(selectedRunnee.baseName()).toUtf8());
     runCode.close();
     runnee.setGeneratedFiles(QStringList() << outRPath);
     runnee.setExitCode(0);
