@@ -2,6 +2,7 @@
 
 #include <QProcess>
 #include <QDebug>
+#include <QDataStream>
 
 using namespace Compiler;
 
