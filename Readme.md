@@ -17,13 +17,17 @@ Building
 ========
 
 ## OS X and Linux
-
+	#Generate Library
 	cd pcompiler
 	mkdir build
 	cd build
 	cmake ..
 	make
 	make install
+
+	#Install Generated Library
+	cd .. #pcompiler root directory
+	sudo cp lib/pcompiler.so /usr/lib
 
 ## Windows
 
