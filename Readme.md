@@ -17,6 +17,7 @@ Building
 ========
 
 ## OS X and Linux
+```bash
 	#Generate Library
 	cd pcompiler
 	mkdir build
@@ -28,7 +29,7 @@ Building
 	#Install Generated Library
 	cd .. #pcompiler root directory
 	sudo cp lib/pcompiler.so /usr/lib
-
+```
 ## Windows
 
 Prerequisite: The binaries/includes/libraries are installed into `<dir>\prefix`
