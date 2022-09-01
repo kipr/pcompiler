@@ -1,7 +1,7 @@
 #include "pcompiler/engine.hpp"
 
 #include <QDebug>
-
+#include <algorithm>
 using namespace Compiler;
 
 template <typename T>
@@ -21,7 +21,7 @@ Engine::Engine()
 Engine::Engine(const QList<const Base *>& compilers)
 	: m_compilers(compilers)
 {
-	qSort(m_compilers.begin(), m_compilers.end(), PtrLess<Base>());
+	std::sort(m_compilers.begin(), m_compilers.end(), PtrLess<Base>());
 }
 
 Engine::~Engine()
@@ -31,14 +31,14 @@ Engine::~Engine()
 void Engine::addCompiler(const Base *compiler)
 {
 	m_compilers.append(compiler);
-	qSort(m_compilers.begin(), m_compilers.end(), PtrLess<Base>());
+	std::sort(m_compilers.begin(), m_compilers.end(), PtrLess<Base>());
 }
 
 void Engine::addCompilers(const QList<const Base *>& compilers)
 {
 	m_compilers.append(compilers);
 	
-	qSort(m_compilers.begin(), m_compilers.end(), PtrLess<Base>());
+	std::sort(m_compilers.begin(), m_compilers.end(), PtrLess<Base>());
 }
 
 void Engine::removeCompiler(const Base *compiler)
@@ -59,7 +59,7 @@ OutputList Engine::compile(const Input& input, Options& options, Progress *progr
 	double processed = 0;
 	while(!workingCompilers.isEmpty()) {
 		const Base *compiler = workingCompilers.takeFirst();
-		QStringList workingInputList = QStringList(workingInput.toList());
+		QStringList workingInputList = QStringList(workingInput.begin(), workingInput.end());
 		if(progress) progress->progress(processed / (double)workingInputList.size());
 		QStringList applicableInput;
 		foreach(const QString& file, workingInputList) {
@@ -74,11 +74,12 @@ OutputList Engine::compile(const Input& input, Options& options, Progress *progr
 			OutputList outList = compiler->transform(applicableInput, options);
 			foreach(const Output& out, outList) {
 				if(!out.isSuccess()) return ret + outList;
-				workingInput += out.generatedFiles().toSet();
+				QStringList generatedFiles = out.generatedFiles();
+				workingInput += QSet(generatedFiles.begin(), generatedFiles.end());
 			}
 			ret += outList;
 		}
-		workingInput -= applicableInput.toSet();
+		workingInput += QSet(applicableInput.begin(), applicableInput.end());
 		processed += applicableInput.size();
 	}
 	

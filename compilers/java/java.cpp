@@ -2,6 +2,7 @@
 #include "pcompiler/compilers.hpp"
 #include "../common/platform.hpp"
 #include "pcompiler/compiler_options.hpp"
+#include <QRegularExpression>
 
 #include <QFileInfo>
 #include <QProcess>
@@ -33,7 +34,7 @@ OutputList Java::transform(const QStringList &input, Options &options) const
 	ret.setExitCode(compiler.exitCode());
 	ret.setOutput(compiler.readAllStandardOutput());
 	ret.setError(compiler.readAllStandardError());
-	ret.setGeneratedFiles(QStringList(input).replaceInStrings(QRegExp("\\.java$"), ".class"));
+	ret.setGeneratedFiles(QStringList(input).replaceInStrings(QRegularExpression("\\.java$"), ".class"));
 	
 	return OutputList() << ret;
 }

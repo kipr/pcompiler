@@ -2,7 +2,7 @@ project(pcompiler)
 
 cmake_minimum_required(VERSION 2.8.12)
 
-find_package(Qt5Core REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Core)
 
 include_directories(/usr/local/include)
 
@@ -19,7 +19,7 @@ file(GLOB_RECURSE COMPILER_SOURCES ${COMPILER}/*.c ${COMPILER}/*.cpp)
 set(SOURCES ${SOURCES} ${COMPILER_SOURCES})
 set(MOC_SOURCES ${INCLUDES})
 
-qt5_wrap_cpp(SOURCES ${MOC_SOURCES})
+qt6_wrap_cpp(SOURCES ${MOC_SOURCES})
 
 add_definitions(-Wall)
 
@@ -29,7 +29,8 @@ endif(APPLE)
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/lib)
 add_library(pcompiler SHARED ${SOURCES} ${INCLUDES})
-qt5_use_modules(pcompiler Core)
+target_link_libraries(pcompiler Qt6::Core)
+
 
 link_directories(${pcompiler_SOURCE_DIR}/lib)
 
@@ -38,8 +39,8 @@ set(OSX_INSTALL_NAMES_SCRIPT "${pcompiler_SOURCE_DIR}/scripts/osx_install_names.
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -headerpad_max_install_names")
 add_custom_target(osx_install_names ALL 
 	COMMAND sh ${OSX_INSTALL_NAMES_SCRIPT} ${LIBRARY_OUTPUT_PATH}/libpcompiler.dylib
-		${_qt5Core_install_prefix}/lib
-    QtCore.framework/Versions/5/QtCore
+		${_qt6Core_install_prefix}/lib
+    QtCore.framework/Versions/6/QtCore
 	WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}
 	DEPENDS pcompiler)
 endif()

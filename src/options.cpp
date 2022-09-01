@@ -24,7 +24,7 @@ Options Options::load(const QString &path)
 	);
 
 	foreach(const QString &key, settings.childKeys()) {
-		if(settings.value(key).type() == QVariant::String) {
+		if(settings.value(key).typeId() == QVariant::String) {
 			const QString previous = ret.take(key).toString();
 			ret.insert(key, previous + " " + settings.value(key).toString());
 		}
@@ -80,7 +80,7 @@ void Options::expand()
 void Options::replace(const QString &str, const QString &value)
 {
 	foreach(const QString &key, keys()) {
-		if(this->value(key).type() != QVariant::String) continue;
+		if(this->value(key).typeId() != QVariant::String) continue;
 		const QString replacement = take(key).toString().replace(str, value);
 		insert(key, replacement);
 	}
@@ -90,7 +90,7 @@ QStringList OptionParser::arguments(const QString &argumentString)
 {
 	QString current;
 	QStringList ret;
-	QChar l = 0;
+	QChar l = QChar(0);
 	bool isQuotes = false;
 	for(int i = 0; i < argumentString.size(); ++i) {
 		QChar c = argumentString[i];
