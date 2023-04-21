@@ -1,5 +1,6 @@
 project(pcompiler)
 
+option(docker_cross "Cross compile option for docker container" OFF)
 cmake_minimum_required(VERSION 2.8.12)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
@@ -26,6 +27,10 @@ add_definitions(-Wall)
 if(APPLE)
   link_directories(/Library/Frameworks/)
 endif(APPLE)
+
+if(docker_cross)
+	link_directories("${LIBKAR_ROOT}/lib")
+endif(docker_cross)
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/lib)
 add_library(pcompiler SHARED ${SOURCES} ${INCLUDES})
