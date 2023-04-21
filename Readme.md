@@ -22,7 +22,7 @@ Building
 	cd pcompiler
 	mkdir build
 	cd build
-	cmake ..
+	cmake .. or cmake -Ddocker_cross=ON .. (docker cross compiling option)
 	make
 	make install
 
@@ -46,6 +46,7 @@ Authors
 
 * Braden McDorman
 * Nafis Zaman
+* Erin Harrington
 
 License
 =======

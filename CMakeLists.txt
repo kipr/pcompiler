@@ -19,7 +19,7 @@ file(GLOB_RECURSE COMPILER_SOURCES ${COMPILER}/*.c ${COMPILER}/*.cpp)
 
 set(SOURCES ${SOURCES} ${COMPILER_SOURCES})
 set(MOC_SOURCES ${INCLUDES})
-
+set(LIBKAR_ROOT ${CMAKE_SOURCE_DIR}/../libkar)
 qt6_wrap_cpp(SOURCES ${MOC_SOURCES})
 
 add_definitions(-Wall)
