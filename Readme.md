@@ -28,7 +28,7 @@ Building
 
 	#Install Generated Library
 	cd .. #pcompiler root directory
-	sudo cp lib/pcompiler.so /usr/lib
+	sudo cp lib/libpbcompiler.so /usr/lib
 ```
 ## Windows
 
