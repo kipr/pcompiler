@@ -58,3 +58,10 @@ install(FILES ${INCLUDES} DESTINATION include/pcompiler)
 install(TARGETS pcompiler DESTINATION lib)
 
 add_subdirectory(tools)
+
+set(CPACK_PACKAGE_NAME pcompiler)
+set(CPACK_GENERATOR "DEB")
+set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE arm64)
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "KISS Institute for Practical Robotics")
+set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+include(CPack)
