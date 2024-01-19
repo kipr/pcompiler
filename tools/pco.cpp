@@ -130,8 +130,8 @@ int main(int argc, char *argv[])
     {
         extracted << tmpDir + "/" + file;
     }
-    
-    Compiler::Input input = Compiler::Input::fromList(extracted);
+    Compiler::Input input =  Compiler::Input(extracted.begin(),extracted.end());
+    //Compiler::Input::fromList(extracted);
     Compiler::Options opts = Compiler::Options::load("/home/stefan/tmp/platform.hints");
     
     // compile the files

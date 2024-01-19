@@ -2,7 +2,7 @@ project(pco)
 
 cmake_minimum_required(VERSION 2.8.12)
 
-find_package(Qt5Core REQUIRED)
+find_package(Qt6Core REQUIRED)
 
 if(WIN32)
 include_directories(${CMAKE_INSTALL_PREFIX}/include)
@@ -11,6 +11,6 @@ endif()
 
 add_executable(pco pco.cpp)
 target_link_libraries(pco kar pcompiler)
-qt5_use_modules(pco Core)
+#qt6_use_modules(pco Core)
 
 install(TARGETS pco RUNTIME DESTINATION bin)

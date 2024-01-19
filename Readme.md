@@ -22,13 +22,13 @@ Building
 	cd pcompiler
 	mkdir build
 	cd build
-	cmake ..
+	cmake .. or cmake -Ddocker_cross=ON .. (docker cross compiling option)
 	make
 	make install
 
 	#Install Generated Library
 	cd .. #pcompiler root directory
-	sudo cp lib/pcompiler.so /usr/lib
+	sudo cp lib/libpcompiler.so /usr/lib
 ```
 ## Windows
 
@@ -46,6 +46,7 @@ Authors
 
 * Braden McDorman
 * Nafis Zaman
+* Erin Harrington
 
 License
 =======

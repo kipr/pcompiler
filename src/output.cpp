@@ -3,6 +3,7 @@
 #include <QProcess>
 #include <QDebug>
 #include <QDataStream>
+#include <iostream>
 
 using namespace Compiler;
 
@@ -101,12 +102,12 @@ bool Output::isSuccess() const
 
 void Output::dump(QTextStream &stream) const
 {
-	stream << "Files:           {" << m_files.join(", ") << "}"<< endl;
-	if(!m_generatedFiles.isEmpty()) stream << "Generated Files: {" << m_generatedFiles.join(", ") << "}" << endl;
-	stream << "Exit Code:       " << m_exitCode << endl;
-	stream << "Terminal?:       " << m_terminal << endl;
-	if(!m_output.isEmpty()) stream << "Output: " << endl << m_output << endl;
-	if(!m_error.isEmpty()) stream << "Error: " << endl << m_error << endl;
+	stream << "Files:           {" << m_files.join(", ") << "}"<< Qt::endl;
+	if(!m_generatedFiles.isEmpty()) stream << "Generated Files: {" << m_generatedFiles.join(", ") << "}" << Qt::endl;
+	stream << "Exit Code:       " << m_exitCode << Qt::endl;
+	stream << "Terminal?:       " << m_terminal << Qt::endl;
+	if(!m_output.isEmpty()) stream << "Output: " << Qt::endl << m_output << Qt::endl;
+	if(!m_error.isEmpty()) stream << "Error: " << Qt::endl << m_error << Qt::endl;
 }
 
 Output Output::fromProcess(const QString& file, QProcess *process)
