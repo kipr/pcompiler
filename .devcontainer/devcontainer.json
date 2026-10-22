@@ -1,0 +1,35 @@
+{
+  "name": "pcompiler",
+  // The dev stage of the repo's Dockerfile; the default (last) stage is the plain builder.
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": "..",
+    "target": "dev"
+  },
+  // Agent logins live in shared named volumes, reused by every devcontainer on this machine.
+  "mounts": [
+    "source=claude-config,target=/home/code/.claude,type=volume",
+    "source=codex-config,target=/home/code/.codex,type=volume"
+  ],
+  // The Claude Code and Codex sandboxes use bubblewrap. Docker's default seccomp profile blocks it,
+  // and its masked /proc paths stop bwrap from mounting /proc.
+  "runArgs": [
+    "--security-opt=seccomp=unconfined",
+    "--security-opt=systempaths=unconfined"
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools-extension-pack",
+        "github.vscode-pull-request-github",
+        "openai.chatgpt"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "fish",
+        "terminal.integrated.profiles.linux": {
+          "fish": { "path": "/usr/bin/fish" }
+        }
+      }
+    }
+  }
+}

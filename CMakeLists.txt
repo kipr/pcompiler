@@ -1,7 +1,7 @@
-project(pcompiler)
+cmake_minimum_required(VERSION 3.20)
+project(pcompiler VERSION 1.0.1)
 
 option(docker_cross "Cross compile option for docker container" OFF)
-cmake_minimum_required(VERSION 2.8.12)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
@@ -64,4 +64,5 @@ set(CPACK_GENERATOR "DEB")
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE arm64)
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "KISS Institute for Practical Robotics")
 set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libkar, libqt6core6t64 (>= 6.8.0), libc6, libgcc-s1, libstdc++6")
 include(CPack)

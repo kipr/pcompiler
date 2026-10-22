@@ -1,20 +1,40 @@
-pcompiler (Precedence Compiler)
-===============================
+# pcompiler (Precedence Compiler)
 
 pcompiler is an automatic source code compiler.
 Given a set of input files, pcompiler will attempt to create an executable out of them.
 
 pcompiler is not robust enough to compile large or complex projects, but is extremely simple to use.
 
-Requirements
-============
+# Requirements
 
 * Qt 5.0 or higher
 * CMake 2.8.12
 * libkar (only for the command line pcompiler tool)
 
-Building
-========
+# Building
+
+## Cross-compile to the Wombat (Raspberry Pi 3b+)
+
+Local build, tested on Debian 13:
+
+```bash
+sudo dpkg --add-architecture arm64
+sudo apt update
+sudo apt install make cmake gcc-aarch64-linux-gnu g++-aarch64-linux-gnu qt6-base-dev:arm64
+# Replace with your version of `libkar`
+sudo apt install ./libkar-1.0.1-Linux.deb
+cmake -Bbuild -DCMAKE_TOOLCHAIN_FILE=toolchain/aarch64-linux-gnu.cmake .
+cmake --build build -j "$(nproc)"
+```
+
+Build in the devcontainer: see [.devcontainer/README.md](.devcontainer/README.md).
+
+Build with Docker:
+
+```bash
+docker build -t pcompiler-builder .
+docker run --rm --mount type=bind,source=.,destination=/src/ pcompiler-builder sh -c 'cmake -B/src/build -DCMAKE_TOOLCHAIN_FILE=/src/toolchain/aarch64-linux-gnu.cmake /src && cmake --build /src/build -j "$(nproc)" && cd /src/build && cpack'
+```
 
 ## OS X and Linux
 ```bash
